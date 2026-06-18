@@ -185,3 +185,16 @@ footer{
 .upload-card button{
   margin-top:20px;
 }
+.scan-container{
+    padding:40px;
+    text-align:center;
+}
+
+.upload-card{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
