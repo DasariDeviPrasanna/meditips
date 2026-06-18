@@ -136,3 +136,35 @@ footer{
     border-radius:10px;
     cursor:pointer;
 }
+.dashboard{
+    padding:40px;
+    text-align:center;
+}
+
+.cards{
+    margin-top:40px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card h2{
+    font-size:40px;
+}
+
+.card h3{
+    margin-top:10px;
+}
