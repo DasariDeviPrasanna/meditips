@@ -32,9 +32,9 @@ document
   () => {
 
     localStorage.setItem(
-      "medicineName",
-      "Dolo 650"
-    );
+  "medicineId",
+  "dolo650"
+);
 
     window.location.href =
       "result.html";

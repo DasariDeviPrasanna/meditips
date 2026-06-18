@@ -1,22 +1,44 @@
-const medicineName =
-localStorage.getItem(
-  "medicineName"
-);
+import { getMedicine }
+from "./medicine-service.js";
 
-document.getElementById(
-  "medicineName"
-).innerText = medicineName;
+async function loadMedicine() {
 
-if (medicineName === "Dolo 650") {
+  const medicineId =
+    localStorage.getItem(
+      "medicineId"
+    );
+
+  if (!medicineId) {
+    return;
+  }
+
+  const medicine =
+    await getMedicine(
+      medicineId
+    );
+
+  if (!medicine) {
+    alert(
+      "Medicine not found"
+    );
+    return;
+  }
+
+  document.getElementById(
+    "medicineName"
+  ).innerText =
+  medicine.name;
 
   document.getElementById(
     "uses"
   ).innerText =
-  "Fever, Body Pain, Headache";
+  medicine.uses;
 
   document.getElementById(
     "telugu"
   ).innerText =
-  "ఈ మందు జ్వరం మరియు శరీర నొప్పి తగ్గించడానికి ఉపయోగిస్తారు.";
+  medicine.teluguExplanation;
 
 }
+
+loadMedicine();
