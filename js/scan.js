@@ -31,10 +31,17 @@ document
   "click",
   () => {
 
-    localStorage.setItem(
-  "medicineId",
-  "dolo650"
+  const medicineId = prompt(
+  "Enter medicine id:\n\ndolo650\ncrocin\nazee500\npantocid40\ntelma40\naugmentin625"
 );
+
+localStorage.setItem(
+  "medicineId",
+  medicineId
+);
+
+window.location.href =
+  "result.html";
 
     window.location.href =
       "result.html";
