@@ -72,18 +72,42 @@ document
             })
           }
         );
+        const data =
+  await response.json();
 
-      const data =
-        await response.json();
+const detected =
+  data.medicineName
+    .toLowerCase();
 
-      console.log(
-        "Gemini Response:",
-        data
-      );
+let medicineId = "";
 
-      alert(
-        JSON.stringify(data)
-      );
+if (detected.includes("dolo")) {
+  medicineId = "dolo650";
+}
+else if (detected.includes("crocin")) {
+  medicineId = "crocin";
+}
+else if (detected.includes("azee")) {
+  medicineId = "azee500";
+}
+else if (detected.includes("pantocid")) {
+  medicineId = "pantocid40";
+}
+else if (detected.includes("augmentin")) {
+  medicineId = "augmentin625";
+}
+else if (detected.includes("telma")) {
+  medicineId = "telma40";
+}
+
+localStorage.setItem(
+  "medicineId",
+  medicineId
+);
+
+window.location.href =
+  "result.html";
+      
 
     } catch (error) {
 

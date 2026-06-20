@@ -31,7 +31,7 @@ export default async function handler(req, res) {
                 parts: [
                   {
                     text:
-                        "Read all visible text from this medicine strip image and return the text exactly as seen."
+                      "Identify the medicine brand name from this medicine strip image. Return ONLY the medicine name such as Dolo 650, Crocin Advance, Azee 500, Pantocid 40. Do not return any other text."
                   },
                   {
                     inline_data: {
@@ -62,10 +62,14 @@ export default async function handler(req, res) {
 
     console.error(error);
 
-    return res.status(500).json({
-      error:
-        error.message
-    });
+    const medicineName =
+  data?.candidates?.[0]
+    ?.content?.parts?.[0]
+    ?.text || "";
+
+return res.status(200).json({
+  medicineName
+});
 
   }
 }
