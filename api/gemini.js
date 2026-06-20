@@ -31,7 +31,7 @@ export default async function handler(req, res) {
                 parts: [
                   {
                     text:
-                        "Look at this medicine strip image. Extract the medicine brand name exactly as written on the strip. Return only the medicine name, nothing else."
+                        "Read all visible text from this medicine strip image and return the text exactly as seen."
                   },
                   {
                     inline_data: {
