@@ -1,12 +1,8 @@
 const imageInput =
-document.getElementById(
-  "medicineImage"
-);
+document.getElementById("medicineImage");
 
 const previewImage =
-document.getElementById(
-  "previewImage"
-);
+document.getElementById("previewImage");
 
 imageInput.addEventListener(
   "change",
@@ -25,15 +21,27 @@ imageInput.addEventListener(
 
   }
 );
-document
-.getElementById("scanBtn")
-.addEventListener(
-  "click",
-  () => {
 
-  const medicineId = prompt(
-  "Enter medicine id:\n\ndolo650\ncrocin\nazee500\npantocid40\ntelma40\naugmentin625"
-);
+function fileToBase64(file) {
+
+  return new Promise((resolve) => {
+
+    const reader =
+      new FileReader();
+
+    reader.onload = () => {
+
+      resolve(
+        reader.result.split(",")[1]
+      );
+
+    };
+
+    reader.readAsDataURL(file);
+
+  });
+
+}
 
 document
 .getElementById("scanBtn")
@@ -52,9 +60,7 @@ document
     }
 
     const base64 =
-      await fileToBase64(
-        file
-      );
+      await fileToBase64(file);
 
     const response =
       await fetch(
@@ -87,37 +93,3 @@ document
 
   }
 );
-
-window.location.href =
-  "result.html";
-
-    window.location.href =
-      "result.html";
-
-  }
-);
-function fileToBase64(file) {
-
-  return new Promise(
-    (resolve) => {
-
-      const reader =
-        new FileReader();
-
-      reader.onload =
-        () => {
-
-          resolve(
-            reader.result
-              .split(",")[1]
-          );
-
-        };
-
-      reader.readAsDataURL(
-        file
-      );
-
-    }
-  );
-}
