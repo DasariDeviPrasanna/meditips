@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
     const response =
       await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
         {
           method: "POST",
           headers: {
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
                 parts: [
                   {
                     text:
-                      "Identify the medicine name from this medicine strip image. Return only the medicine name."
+                        "Look at this medicine strip image. Extract the medicine brand name exactly as written on the strip. Return only the medicine name, nothing else."
                   },
                   {
                     inline_data: {
