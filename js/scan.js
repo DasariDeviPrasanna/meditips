@@ -93,3 +93,24 @@ document
 
   }
 );
+const response = await fetch(
+  "/api/gemini",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      image: base64,
+      mimeType: file.type
+    })
+  }
+);
+
+console.log("STATUS:", response.status);
+
+const data = await response.json();
+
+console.log("FULL RESPONSE:", data);
+
+alert(JSON.stringify(data));
