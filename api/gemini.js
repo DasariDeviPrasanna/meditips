@@ -8,17 +8,22 @@ export default async function handler(req, res) {
 
   try {
 
+    console.log(
+      "KEY EXISTS:",
+      !!process.env.GEMINI_API_KEY
+    );
+
     const { image, mimeType } =
       req.body;
 
     const response =
       await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
         {
           method: "POST",
           headers: {
             "Content-Type":
-            "application/json"
+              "application/json"
           },
           body: JSON.stringify({
             contents: [
@@ -46,18 +51,18 @@ export default async function handler(req, res) {
     const data =
       await response.json();
 
-    const medicineName =
-      data?.candidates?.[0]
-        ?.content?.parts?.[0]
-        ?.text || "";
+    console.log(
+      "GEMINI RESPONSE:",
+      JSON.stringify(data, null, 2)
+    );
 
-    res.status(200).json({
-      medicineName
-    });
+    return res.status(200).json(data);
 
   } catch (error) {
 
-    res.status(500).json({
+    console.error(error);
+
+    return res.status(500).json({
       error:
         error.message
     });
