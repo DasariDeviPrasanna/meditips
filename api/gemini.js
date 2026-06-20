@@ -49,20 +49,14 @@ export default async function handler(req, res) {
       );
 
     const data =
-      await response.json();
+  await response.json();
 
-    console.log(
-      "GEMINI RESPONSE:",
-      JSON.stringify(data, null, 2)
-    );
+console.log(
+  "GEMINI RESPONSE:",
+  JSON.stringify(data, null, 2)
+);
 
-    return res.status(200).json(data);
-
-  } catch (error) {
-
-    console.error(error);
-
-    const medicineName =
+const medicineName =
   data?.candidates?.[0]
     ?.content?.parts?.[0]
     ?.text || "";
@@ -71,5 +65,13 @@ return res.status(200).json({
   medicineName
 });
 
-  }
+} catch (error) {
+
+  console.error(error);
+
+  return res.status(500).json({
+    error: error.message
+  });
+
+}
 }

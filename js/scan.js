@@ -75,10 +75,19 @@ document
         const data =
   await response.json();
 
+
+  console.log(data);
+
+if (!data.medicineName) {
+  alert(
+    "Medicine name not detected"
+  );
+  return;
+}
+
 const detected =
   data.medicineName
     .toLowerCase();
-
 let medicineId = "";
 
 if (detected.includes("dolo")) {
