@@ -8,8 +8,7 @@ imageInput.addEventListener(
   "change",
   (event) => {
 
-    const file =
-      event.target.files[0];
+    const file = event.target.files[0];
 
     if (!file) return;
 
@@ -18,7 +17,6 @@ imageInput.addEventListener(
 
     previewImage.style.display =
       "block";
-
   }
 );
 
@@ -26,15 +24,12 @@ function fileToBase64(file) {
 
   return new Promise((resolve) => {
 
-    const reader =
-      new FileReader();
+    const reader = new FileReader();
 
     reader.onload = () => {
-
       resolve(
         reader.result.split(",")[1]
       );
-
     };
 
     reader.readAsDataURL(file);
@@ -53,66 +48,52 @@ document
       imageInput.files[0];
 
     if (!file) {
-      alert(
-        "Please select image"
-      );
+      alert("Please select image");
       return;
     }
 
-    const base64 =
-      await fileToBase64(file);
-    console.log(
-      "Base64 Generated"
-    );
+    try {
 
+      const base64 =
+        await fileToBase64(file);
 
-    const response =
-      await fetch(
-        "/api/gemini",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-            "application/json"
-          },
-          body: JSON.stringify({
-            image: base64,
-            mimeType:
-              file.type
-          })
-        }
+      const response =
+        await fetch(
+          "/api/gemini",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+              image: base64,
+              mimeType: file.type
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      console.log(
+        "Gemini Response:",
+        data
       );
 
-    const data =
-      await response.json();
+      alert(
+        JSON.stringify(data)
+      );
 
-    
-    console.log(data);
+    } catch (error) {
 
-    alert(
-      JSON.stringify(data)
-    );
+      console.error(error);
+
+      alert(
+        "Scan Failed"
+      );
+
+    }
 
   }
 );
-const response = await fetch(
-  "/api/gemini",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      image: base64,
-      mimeType: file.type
-    })
-  }
-);
-
-console.log("STATUS:", response.status);
-
-const data = await response.json();
-
-console.log("FULL RESPONSE:", data);
-
-alert(JSON.stringify(data));
