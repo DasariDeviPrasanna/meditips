@@ -8,7 +8,8 @@ imageInput.addEventListener(
   "change",
   (event) => {
 
-    const file = event.target.files[0];
+    const file =
+      event.target.files[0];
 
     if (!file) return;
 
@@ -17,6 +18,7 @@ imageInput.addEventListener(
 
     previewImage.style.display =
       "block";
+
   }
 );
 
@@ -24,12 +26,15 @@ function fileToBase64(file) {
 
   return new Promise((resolve) => {
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
     reader.onload = () => {
+
       resolve(
         reader.result.split(",")[1]
       );
+
     };
 
     reader.readAsDataURL(file);
@@ -48,7 +53,9 @@ document
       imageInput.files[0];
 
     if (!file) {
-      alert("Please select image");
+      alert(
+        "Please select image"
+      );
       return;
     }
 
@@ -68,57 +75,108 @@ document
             },
             body: JSON.stringify({
               image: base64,
-              mimeType: file.type
+              mimeType:
+                file.type
             })
           }
         );
-        const data =
-  await response.json();
 
+      const data =
+        await response.json();
 
-  console.log(data);
+      console.log(
+        "Gemini Response:",
+        data
+      );
 
-if (!data.medicineName) {
-  alert(
-    "Medicine name not detected"
-  );
-  return;
-}
+      if (!data.medicineName) {
 
-const detected =
-  data.medicineName
-    .toLowerCase();
-let medicineId = "";
+        alert(
+          "Medicine name not detected"
+        );
 
-if (detected.includes("dolo")) {
-  medicineId = "dolo650";
-}
-else if (detected.includes("crocin")) {
-  medicineId = "crocin";
-}
-else if (detected.includes("azee")) {
-  medicineId = "azee500";
-}
-else if (detected.includes("pantocid")) {
-  medicineId = "pantocid40";
-}
-else if (detected.includes("augmentin")) {
-  medicineId = "augmentin625";
-}
-else if (detected.includes("telma")) {
-  medicineId = "telma40";
-}
+        return;
 
-localStorage.setItem(
-  "medicineId",
-  medicineId
-);
+      }
 
-window.location.href =
-  "result.html";
-      
+      localStorage.setItem(
+        "medicineName",
+        data.medicineName
+      );
 
-    } catch (error) {
+      const detected =
+        data.medicineName
+          .toLowerCase();
+
+      let medicineId = "";
+
+      if (
+        detected.includes("dolo")
+      ) {
+        medicineId =
+          "dolo650";
+      }
+
+      else if (
+        detected.includes("crocin")
+      ) {
+        medicineId =
+          "crocin";
+      }
+
+      else if (
+        detected.includes("azee")
+      ) {
+        medicineId =
+          "azee500";
+      }
+
+      else if (
+        detected.includes("pantocid")
+      ) {
+        medicineId =
+          "pantocid40";
+      }
+
+      else if (
+        detected.includes("augmentin")
+      ) {
+        medicineId =
+          "augmentin625";
+      }
+
+      else if (
+        detected.includes("telma")
+      ) {
+        medicineId =
+          "telma40";
+      }
+
+      if (!medicineId) {
+
+        localStorage.setItem(
+          "medicineId",
+          "unknown"
+        );
+
+        window.location.href =
+          "result.html";
+
+        return;
+
+      }
+
+      localStorage.setItem(
+        "medicineId",
+        medicineId
+      );
+
+      window.location.href =
+        "result.html";
+
+    }
+
+    catch (error) {
 
       console.error(error);
 

@@ -18,11 +18,47 @@ async function loadMedicine() {
     );
 
   if (!medicine) {
-    alert(
-      "Medicine not found"
+
+  const medicineName =
+    localStorage.getItem(
+      "medicineName"
     );
-    return;
-  }
+
+  const response =
+    await fetch(
+      "/api/medicine-info",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify({
+          medicineName
+        })
+      }
+    );
+
+  const aiData =
+    await response.json();
+
+  document.getElementById(
+    "medicineName"
+  ).innerText =
+    medicineName;
+
+  document.getElementById(
+    "uses"
+  ).innerText =
+    aiData.uses;
+
+  document.getElementById(
+    "telugu"
+  ).innerText =
+    aiData.teluguExplanation;
+
+  return;
+}
 
   document.getElementById(
     "medicineName"
