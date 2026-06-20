@@ -61,6 +61,10 @@ document
 
     const base64 =
       await fileToBase64(file);
+    console.log(
+      "Base64 Generated"
+    );
+
 
     const response =
       await fetch(
@@ -82,13 +86,11 @@ document
     const data =
       await response.json();
 
-    console.log(
-      "Detected:",
-      data.medicineName
-    );
+    
+    console.log(data);
 
     alert(
-      data.medicineName
+      JSON.stringify(data)
     );
 
   }
