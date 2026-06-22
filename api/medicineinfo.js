@@ -29,18 +29,14 @@ Give:
     );
 
     const data = await response.json();
+    console.log(
+  JSON.stringify(data, null, 2)
+);
+
+return res.status(200).json(data);
 
     console.log(data);
 
-    const text =
-      data?.candidates?.[0]
-      ?.content?.parts?.[0]
-      ?.text || "No information found";
-
-    return res.status(200).json({
-      uses: text,
-      teluguExplanation: text
-    });
 
   } catch (error) {
 
