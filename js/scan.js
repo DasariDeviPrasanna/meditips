@@ -53,10 +53,13 @@ document
       imageInput.files[0];
 
     if (!file) {
+
       alert(
         "Please select image"
       );
+
       return;
+
     }
 
     try {
@@ -75,8 +78,7 @@ document
             },
             body: JSON.stringify({
               image: base64,
-              mimeType:
-                file.type
+              mimeType: file.type
             })
           }
         );
@@ -89,7 +91,10 @@ document
         data
       );
 
-      if (!data.medicineName) {
+      if (
+        !data ||
+        !data.medicineName
+      ) {
 
         alert(
           "Medicine name not detected"
@@ -107,6 +112,11 @@ document
       const detected =
         data.medicineName
           .toLowerCase();
+
+      console.log(
+        "Detected:",
+        detected
+      );
 
       let medicineId = "";
 
@@ -154,6 +164,10 @@ document
 
       if (!medicineId) {
 
+        console.log(
+          "Unknown medicine"
+        );
+
         localStorage.setItem(
           "medicineId",
           "unknown"
@@ -178,7 +192,10 @@ document
 
     catch (error) {
 
-      console.error(error);
+      console.error(
+        "Scan Error:",
+        error
+      );
 
       alert(
         "Scan Failed"
