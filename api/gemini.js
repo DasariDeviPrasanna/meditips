@@ -63,7 +63,7 @@ Rules:
           })
         }
       );
-
+    console.log("Response Status:", response.status);
     const data =
       await response.json();
 
@@ -91,10 +91,7 @@ Rules:
         .split("\n")[0]
         .trim();
 
-    return res.status(200).json({
-      rawText,
-      medicineName
-    });
+    return res.status(200).json(data);
 
   }
 
