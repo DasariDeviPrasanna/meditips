@@ -41,6 +41,14 @@ async function loadMedicine() {
 
   const aiData =
     await response.json();
+  console.log(
+  "AI DATA:",
+  aiData
+);
+
+alert(
+  JSON.stringify(aiData)
+);
 
   document.getElementById(
     "medicineName"
