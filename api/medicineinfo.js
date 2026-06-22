@@ -2,46 +2,76 @@ export default async function handler(req, res) {
 
   try {
 
-    const { medicineName } = req.body;
+    const { medicineName } =
+      req.body;
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `
-Medicine: ${medicineName}
+    const response =
+      await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  {
+                    text: `
+Medicine Name: ${medicineName}
 
-What is this medicine used for?
-Give:
-1. Uses in English
-2. Telugu explanation
+Reply ONLY in JSON format.
+
+{
+  "uses":"Short medicine uses in English",
+  "teluguExplanation":"Simple Telugu explanation in Telugu"
+}
 `
-            }]
-          }]
-        })
-      }
+                  }
+                ]
+              }
+            ]
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    console.log(
+      JSON.stringify(data, null, 2)
     );
 
-    const data = await response.json();
-    console.log(
-  JSON.stringify(data, null, 2)
-);
+    const text =
+      data?.candidates?.[0]
+        ?.content?.parts?.[0]
+        ?.text || "{}";
 
-return res.status(200).json(data);
+    const cleaned =
+      text
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
 
-    console.log(data);
+    return res
+      .status(200)
+      .json(
+        JSON.parse(cleaned)
+      );
 
+  }
 
-  } catch (error) {
+  catch (error) {
+
+    console.error(error);
 
     return res.status(500).json({
-      error: error.message
+      uses:
+        "Information unavailable",
+      teluguExplanation:
+        "సమాచారం అందుబాటులో లేదు"
     });
 
   }
