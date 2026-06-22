@@ -92,6 +92,7 @@ Rules:
         .trim();
 
     return res.status(200).json({
+      rawText,
       medicineName
     });
 
