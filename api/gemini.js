@@ -13,8 +13,10 @@ export default async function handler(req, res) {
       !!process.env.GEMINI_API_KEY
     );
 
-    const { image, mimeType } =
-      req.body;
+    const {
+      image,
+      mimeType
+    } = req.body;
 
     const response =
       await fetch(
@@ -30,8 +32,22 @@ export default async function handler(req, res) {
               {
                 parts: [
                   {
-                    text:
-                      "Identify the medicine brand name from this medicine strip image. Return ONLY the medicine name such as Dolo 650, Crocin Advance, Azee 500, Pantocid 40. Do not return any other text."
+                    text: `
+Look at this medicine strip image.
+
+Identify ONLY the medicine brand name printed on the strip.
+
+Rules:
+- Return ONLY the medicine name.
+- No explanation.
+- No extra text.
+- Examples:
+  Dolo 650
+  Crocin Advance
+  Azee 500
+  Pantocid 40
+  RABEKIND-DSR
+`
                   },
                   {
                     inline_data: {
@@ -49,29 +65,47 @@ export default async function handler(req, res) {
       );
 
     const data =
-  await response.json();
+      await response.json();
 
-console.log(
-  "GEMINI RESPONSE:",
-  JSON.stringify(data, null, 2)
-);
+    console.log(
+      "GEMINI RESPONSE:",
+      JSON.stringify(
+        data,
+        null,
+        2
+      )
+    );
 
-const medicineName =
-  data?.candidates?.[0]
-    ?.content?.parts?.[0]
-    ?.text || "";
+    const rawText =
+      data?.candidates?.[0]
+        ?.content?.parts?.[0]
+        ?.text || "";
 
-return res.status(200).json({
-  medicineName
-});
+    console.log(
+      "RAW TEXT:",
+      rawText
+    );
 
-} catch (error) {
+    const medicineName =
+      rawText
+        .split("\n")[0]
+        .trim();
 
-  console.error(error);
+    return res.status(200).json({
+      medicineName
+    });
 
-  return res.status(500).json({
-    error: error.message
-  });
+  }
 
-}
+  catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      error:
+        error.message
+    });
+
+  }
+
 }
