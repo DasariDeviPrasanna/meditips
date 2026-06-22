@@ -26,7 +26,7 @@ async function loadMedicine() {
 
   const response =
     await fetch(
-      "/api/medicine-info",
+      "/api/medicineinfo",
       {
         method: "POST",
         headers: {
