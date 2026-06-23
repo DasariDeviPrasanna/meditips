@@ -8,96 +8,65 @@ export default async function handler(req, res) {
 
   try {
 
-    console.log(
-      "KEY EXISTS:",
-      !!process.env.GEMINI_API_KEY
-    );
-
-    const {
-      image,
-      mimeType
-    } = req.body;
+    const { image, mimeType } =
+      req.body;
 
     const response =
       await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        "https://api.openai.com/v1/chat/completions",
         {
           method: "POST",
           headers: {
             "Content-Type":
-              "application/json"
+              "application/json",
+            "Authorization":
+              `Bearer ${process.env.OPENAI_API_KEY}`
           },
           body: JSON.stringify({
-            contents: [
+            model: "gpt-4o-mini",
+            messages: [
               {
-                parts: [
+                role: "user",
+                content: [
                   {
-                    text: `
-Look at this medicine strip image.
-
-Identify ONLY the medicine brand name printed on the strip.
-
-Rules:
-- Return ONLY the medicine name.
-- No explanation.
-- No extra text.
-- Examples:
-  Dolo 650
-  Crocin Advance
-  Azee 500
-  Pantocid 40
-  RABEKIND-DSR
-`
+                    type: "text",
+                    text:
+                      "Identify ONLY the medicine brand name from this medicine strip image. Return only the medicine name."
                   },
                   {
-                    inline_data: {
-                      mime_type:
-                        mimeType,
-                      data:
-                        image
+                    type: "image_url",
+                    image_url: {
+                      url:
+                        `data:${mimeType};base64,${image}`
                     }
                   }
                 ]
               }
-            ]
+            ],
+            max_tokens: 50
           })
         }
       );
-    console.log("Response Status:", response.status);
+
     const data =
       await response.json();
 
     console.log(
-      "GEMINI RESPONSE:",
-      JSON.stringify(
-        data,
-        null,
-        2
-      )
-    );
-
-    const rawText =
-      data?.candidates?.[0]
-        ?.content?.parts?.[0]
-        ?.text || "";
-
-    console.log(
-      "RAW TEXT:",
-      rawText
+      JSON.stringify(data, null, 2)
     );
 
     const medicineName =
-      rawText
-        .split("\n")[0]
-        .trim();
+      data?.choices?.[0]
+        ?.message?.content
+        ?.trim() || "";
 
-    return res.status(200).json(data);
+    return res.status(200).json({
+      medicineName
+    });
 
   }
 
   catch (error) {
-
-    console.error(error);
 
     return res.status(500).json({
       error:
