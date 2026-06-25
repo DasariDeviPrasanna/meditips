@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-
 <div class="dashboard">
 
     <h1>💊 Meditips</h1>
@@ -16,12 +15,14 @@
 
     <div class="cards">
 
-        <div class="card" onclick="location.href='scan.html'">
+        <div class="card"
+        onclick="location.href='scan.html'">
             <h2>📷</h2>
             <h3>Scan Medicine</h3>
         </div>
 
-        <div class="card" onclick="location.href='search.html'">
+        <div class="card"
+        onclick="location.href='search.html'">
             <h2>🔍</h2>
             <h3>Search Medicine</h3>
         </div>
@@ -38,7 +39,18 @@
 
     </div>
 
+    <button id="logoutBtn">
+        Logout
+    </button>
+
 </div>
 
+<script type="module"
+src="../js/protect.js"></script>
+
+<script type="module"
+src="../js/logout.js"></script>
+
+     
 </body>
 </html>
