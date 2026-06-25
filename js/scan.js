@@ -1,69 +1,70 @@
-export default async function handler(req, res) {
+const imageInput = document.getElementById("medicineImage");
+const previewImage = document.getElementById("previewImage");
+
+imageInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  previewImage.src = URL.createObjectURL(file);
+  previewImage.style.display = "block";
+});
+
+function fileToBase64(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("scanBtn").addEventListener("click", async () => {
+
+  const file = imageInput.files[0];
+
+  if (!file) {
+    alert("Please select an image");
+    return;
+  }
 
   try {
 
-    const { image, mimeType } = req.body;
+    const base64 = await fileToBase64(file);
 
-    if (!image) {
-      return res.status(400).json({ error: "No image provided" });
-    }
-
-    const response = await fetch(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "openai/gpt-oss-120b",   // ✅ Latest vision model (replaces llama-4-scout)
-          messages: [
-            {
-              role: "user",
-              content: [
-                {
-                  type: "image_url",
-                  image_url: {
-                    url: `data:${mimeType};base64,${image}`
-                  }
-                },
-                {
-                  type: "text",
-                  text: `Look at this medicine strip or packaging image.
-Extract the medicine name printed on it.
-Reply with ONLY the medicine name — no extra words, no punctuation, no explanation.
-Example reply: Dolo 650`
-                }
-              ]
-            }
-          ],
-          max_tokens: 50,
-          temperature: 0.1
-        })
-      }
-    );
+    // ✅ /api/gemini కాదు — /api/scan
+    const response = await fetch("/api/scan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        image: base64,
+        mimeType: file.type
+      })
+    });
 
     const data = await response.json();
+    console.log("Groq Scan Response:", data);
 
-    console.log("GROQ SCAN RESPONSE:", JSON.stringify(data, null, 2));
-
-    // Log error if any
-    if (data.error) {
-      console.error("Groq API Error:", data.error);
-      return res.status(200).json({ medicineName: "", error: data.error.message });
+    if (!data || !data.medicineName) {
+      alert("Medicine name not detected. Please try a clearer image.");
+      return;
     }
 
-    const medicineName =
-      data?.choices?.[0]
-        ?.message?.content
-        ?.trim() || "";
+    localStorage.setItem("medicineName", data.medicineName);
 
-    return res.status(200).json({ medicineName, raw: data });
+    const detected = data.medicineName.toLowerCase();
+
+    let medicineId = "";
+    if (detected.includes("dolo"))         medicineId = "dolo650";
+    else if (detected.includes("crocin"))  medicineId = "crocin";
+    else if (detected.includes("azee"))    medicineId = "azee500";
+    else if (detected.includes("pantocid")) medicineId = "pantocid40";
+    else if (detected.includes("augmentin")) medicineId = "augmentin625";
+    else if (detected.includes("telma"))   medicineId = "telma40";
+
+    localStorage.setItem("medicineId", medicineId || "unknown");
+    window.location.href = "result.html";
 
   } catch (error) {
-    console.error("Scan error:", error);
-    return res.status(500).json({ error: "Scan failed", medicineName: "" });
+    console.error("Scan Error:", error);
+    alert("Scan Failed. Please try again.");
   }
 
-}
+});
