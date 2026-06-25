@@ -1,11 +1,14 @@
-<html><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Medicine Result - Meditips</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
 <div class="result-container">
-
   <h1 id="medicineName"></h1>
 
   <div class="card">
@@ -18,38 +21,27 @@
     <p id="telugu"></p>
   </div>
 
-  <!-- ===== CHATBOT SECTION ===== -->
   <div class="chatbot-section">
-
     <div class="chatbot-header">
       <span>🤖</span>
       <h3>Ask about this medicine</h3>
     </div>
-
     <div class="chat-messages" id="chatMessages">
       <div class="chat-bubble bot-bubble">
-        👋 Hi! I can answer your questions about this medicine. Try asking:
-        <br><br>
+        👋 Hi! Ask me anything about this medicine!<br><br>
         • "What are the side effects?"<br>
-        • "Can I take this on empty stomach?"<br>
-        • "What is the dosage?"<br>
-        • "Can diabetics take this?" (Telugu/Hindi ok too!)
+        • "Can I take on empty stomach?"<br>
+        • "What is the dosage?"
       </div>
     </div>
-
     <div class="chat-input-row">
-      <input type="text" id="chatInput" placeholder="Ask a question about this medicine..." autocomplete="off">
+      <input type="text" id="chatInput" placeholder="Ask a question..." autocomplete="off">
       <button id="chatSendBtn">Send</button>
     </div>
-
   </div>
-  <!-- ===== END CHATBOT SECTION ===== -->
-
 </div>
 
 <script type="module" src="../js/result.js"></script>
 <script type="module" src="../js/chatbot.js"></script>
-
-
-
-</body></html>
+</body>
+</html>

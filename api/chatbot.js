@@ -1,15 +1,13 @@
 export default async function handler(req, res) {
-
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-
     const { userMessage, medicineName, conversationHistory } = req.body;
 
     if (!userMessage || !medicineName) {
-      return res.status(400).json({ error: "Missing userMessage or medicineName" });
+      return res.status(400).json({ error: "Missing fields" });
     }
 
     const messages = [];
@@ -17,10 +15,10 @@ export default async function handler(req, res) {
     messages.push({
       role: "system",
       content: `You are a helpful medical assistant chatbot for the MediTips app.
-The user has just scanned a medicine strip and the detected medicine is: "${medicineName}".
-Answer questions about this medicine clearly and helpfully.
-Always respond in the same language the user writes in (English, Telugu, or Hindi).
-Keep answers concise (3-5 lines max). Add a disclaimer if giving medical advice.`
+The user scanned a medicine: "${medicineName}".
+Answer questions about this medicine clearly.
+Respond in the same language the user writes (English, Telugu, or Hindi).
+Keep answers to 3-5 lines. Add disclaimer for medical advice.`
     });
 
     if (conversationHistory && Array.isArray(conversationHistory)) {
@@ -40,7 +38,7 @@ Keep answers concise (3-5 lines max). Add a disclaimer if giving medical advice.
           "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
         },
         body: JSON.stringify({
-          model: "qwen/qwen3.6-27b",   // ✅ Latest chat model
+          model: "qwen/qwen3.6-27b",
           messages,
           max_tokens: 512,
           temperature: 0.7
@@ -51,18 +49,13 @@ Keep answers concise (3-5 lines max). Add a disclaimer if giving medical advice.
     const data = await response.json();
 
     if (data.error) {
-      console.error("Groq API Error:", data.error);
-      return res.status(200).json({ reply: "Sorry, I could not get a response. Please try again." });
+      return res.status(200).json({ reply: "Sorry, try again." });
     }
 
-    const reply = data?.choices?.[0]?.message?.content?.trim()
-      || "Sorry, I could not understand that. Please try again.";
-
+    const reply = data?.choices?.[0]?.message?.content?.trim() || "Sorry, try again.";
     return res.status(200).json({ reply });
 
   } catch (error) {
-    console.error("Chatbot error:", error);
-    return res.status(200).json({ reply: "Sorry, something went wrong. Please try again." });
+    return res.status(200).json({ reply: "Something went wrong. Please try again." });
   }
-
 }

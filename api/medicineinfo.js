@@ -1,7 +1,5 @@
 export default async function handler(req, res) {
-
   try {
-
     const { medicineName } = req.body;
 
     const response = await fetch(
@@ -13,7 +11,7 @@ export default async function handler(req, res) {
           "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
         },
         body: JSON.stringify({
-          model: "qwen/qwen3.6-27b",   // ✅ Latest chat model (replaces llama-3.3-70b)
+          model: "qwen/qwen3.6-27b",
           messages: [
             {
               role: "system",
@@ -43,7 +41,6 @@ Reply ONLY in this exact JSON format:
     const data = await response.json();
 
     if (data.error) {
-      console.error("Groq API Error:", data.error);
       return res.status(200).json({
         uses: "Medicine information unavailable",
         teluguExplanation: "ఈ మందు గురించి సమాచారం ప్రస్తుతం అందుబాటులో లేదు."
@@ -56,12 +53,10 @@ Reply ONLY in this exact JSON format:
     return res.status(200).json(JSON.parse(cleaned));
 
   } catch (error) {
-    console.error(error);
     return res.status(200).json({
       uses: "Medicine information unavailable",
       teluguExplanation: "ఈ మందు గురించి సమాచారం ప్రస్తుతం అందుబాటులో లేదు."
     });
   }
-
 }
 

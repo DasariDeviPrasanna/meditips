@@ -17,7 +17,6 @@ function fileToBase64(file) {
 }
 
 document.getElementById("scanBtn").addEventListener("click", async () => {
-
   const file = imageInput.files[0];
 
   if (!file) {
@@ -26,21 +25,16 @@ document.getElementById("scanBtn").addEventListener("click", async () => {
   }
 
   try {
-
     const base64 = await fileToBase64(file);
 
-    // ✅ /api/gemini కాదు — /api/scan
     const response = await fetch("/api/scan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        image: base64,
-        mimeType: file.type
-      })
+      body: JSON.stringify({ image: base64, mimeType: file.type })
     });
 
     const data = await response.json();
-    console.log("Groq Scan Response:", data);
+    console.log("Scan Response:", data);
 
     if (!data || !data.medicineName) {
       alert("Medicine name not detected. Please try a clearer image.");
@@ -50,14 +44,14 @@ document.getElementById("scanBtn").addEventListener("click", async () => {
     localStorage.setItem("medicineName", data.medicineName);
 
     const detected = data.medicineName.toLowerCase();
-
     let medicineId = "";
-    if (detected.includes("dolo"))         medicineId = "dolo650";
-    else if (detected.includes("crocin"))  medicineId = "crocin";
-    else if (detected.includes("azee"))    medicineId = "azee500";
+
+    if (detected.includes("dolo"))          medicineId = "dolo650";
+    else if (detected.includes("crocin"))   medicineId = "crocin";
+    else if (detected.includes("azee"))     medicineId = "azee500";
     else if (detected.includes("pantocid")) medicineId = "pantocid40";
     else if (detected.includes("augmentin")) medicineId = "augmentin625";
-    else if (detected.includes("telma"))   medicineId = "telma40";
+    else if (detected.includes("telma"))    medicineId = "telma40";
 
     localStorage.setItem("medicineId", medicineId || "unknown");
     window.location.href = "result.html";
@@ -66,5 +60,4 @@ document.getElementById("scanBtn").addEventListener("click", async () => {
     console.error("Scan Error:", error);
     alert("Scan Failed. Please try again.");
   }
-
 });
