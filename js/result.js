@@ -1,87 +1,38 @@
-import { getMedicine }
-from "./medicine-service.js";
+import { getMedicine } from "./medicine-service.js";
 
 async function loadMedicine() {
 
-  const medicineId =
-    localStorage.getItem(
-      "medicineId"
-    );
+  const medicineId = localStorage.getItem("medicineId");
 
-  if (!medicineId) {
-    return;
-  }
+  if (!medicineId) return;
 
-  const medicine =
-    await getMedicine(
-      medicineId
-    );
+  const medicine = await getMedicine(medicineId);
 
   if (!medicine) {
 
-  const medicineName =
-    localStorage.getItem(
-      "medicineName"
-    );
+    // Medicine not in Firestore — fetch from Gemini AI
+    const medicineName = localStorage.getItem("medicineName");
 
-  const response =
-    await fetch(
-      "/api/medicineinfo",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-        body: JSON.stringify({
-          medicineName
-        })
-      }
-    );
+    const response = await fetch("/api/medicineinfo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ medicineName })
+    });
 
-  const aiData =
-    await response.json();
-  console.log(
-  "AI DATA:",
-  aiData
-);
+    const aiData = await response.json();
 
-alert(
-  JSON.stringify(aiData)
-);
+    // Removed debug: console.log and alert() that were here before
 
-  document.getElementById(
-    "medicineName"
-  ).innerText =
-    medicineName;
+    document.getElementById("medicineName").innerText = medicineName;
+    document.getElementById("uses").innerText = aiData.uses;
+    document.getElementById("telugu").innerText = aiData.teluguExplanation;
 
-  document.getElementById(
-    "uses"
-  ).innerText =
-    aiData.uses;
+    return;
+  }
 
-  document.getElementById(
-    "telugu"
-  ).innerText =
-    aiData.teluguExplanation;
-
-  return;
-}
-
-  document.getElementById(
-    "medicineName"
-  ).innerText =
-  medicine.name;
-
-  document.getElementById(
-    "uses"
-  ).innerText =
-  medicine.uses;
-
-  document.getElementById(
-    "telugu"
-  ).innerText =
-  medicine.teluguExplanation;
+  document.getElementById("medicineName").innerText = medicine.name;
+  document.getElementById("uses").innerText = medicine.uses;
+  document.getElementById("telugu").innerText = medicine.teluguExplanation;
 
 }
 

@@ -4,71 +4,64 @@ export default async function handler(req, res) {
 
     const { medicineName } = req.body;
 
-    const response =
-      await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  {
-                    text: `
-Medicine Name: ${medicineName}
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            {
+              role: "system",
+              content: "You are a medical information assistant. Always reply ONLY with valid JSON. No markdown, no backticks, no extra text."
+            },
+            {
+              role: "user",
+              content: `Medicine Name: ${medicineName}
 
 Provide:
-
 1. Uses of this medicine in English (2-3 lines)
 2. Telugu explanation (2-3 lines)
 
-Reply ONLY in this JSON format:
-
+Reply ONLY in this exact JSON format:
 {
-  "uses":"...",
-  "teluguExplanation":"..."
-}
-`
-                  }
-                ]
-              }
-            ]
-          })
-        }
-      );
-
-    const data =
-      await response.json();
-
-    const text =
-      data?.candidates?.[0]
-        ?.content?.parts?.[0]
-        ?.text || "{}";
-
-    const cleaned =
-      text
-        .replace(/```json/g, "")
-        .replace(/```/g, "")
-        .trim();
-
-    return res.status(200).json(
-      JSON.parse(cleaned)
+  "uses": "...",
+  "teluguExplanation": "..."
+}`
+            }
+          ],
+          max_tokens: 512,
+          temperature: 0.3
+        })
+      }
     );
 
-  }
+    const data = await response.json();
 
-  catch (error) {
+    const text =
+      data?.choices?.[0]
+        ?.message?.content
+        ?.trim() || "{}";
+
+    // Clean up any accidental markdown fences
+    const cleaned = text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    return res.status(200).json(JSON.parse(cleaned));
+
+  } catch (error) {
 
     console.error(error);
 
     return res.status(200).json({
-      uses:
-        "Medicine information unavailable",
-      teluguExplanation:
-        "ఈ మందు గురించి సమాచారం ప్రస్తుతం అందుబాటులో లేదు."
+      uses: "Medicine information unavailable",
+      teluguExplanation: "ఈ మందు గురించి సమాచారం ప్రస్తుతం అందుబాటులో లేదు."
     });
 
   }

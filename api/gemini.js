@@ -1,109 +1,71 @@
 export default async function handler(req, res) {
 
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
-  }
-
   try {
 
-    console.log(
-      "KEY EXISTS:",
-      !!process.env.GEMINI_API_KEY
-    );
+    const { image, mimeType } = req.body;
 
-    const {
-      image,
-      mimeType
-    } = req.body;
+    if (!image) {
+      return res.status(400).json({ error: "No image provided" });
+    }
 
-    const response =
-      await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  {
-                    text: `
-Look at this medicine strip image.
-
-Identify ONLY the medicine brand name printed on the strip.
-
-Rules:
-- Return ONLY the medicine name.
-- No explanation.
-- No extra text.
-- Examples:
-  Dolo 650
-  Crocin Advance
-  Azee 500
-  Pantocid 40
-  RABEKIND-DSR
-`
-                  },
-                  {
-                    inline_data: {
-                      mime_type:
-                        mimeType,
-                      data:
-                        image
-                    }
+    // Groq vision — send image as base64 data URL (OpenAI-compatible format)
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "meta-llama/llama-4-scout-17b-16e-instruct", // Free vision model on Groq
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:${mimeType};base64,${image}`
                   }
-                ]
-              }
-            ]
-          })
-        }
-      );
-    console.log("Response Status:", response.status);
-    const data =
-      await response.json();
-
-    console.log(
-      "GEMINI RESPONSE:",
-      JSON.stringify(
-        data,
-        null,
-        2
-      )
+                },
+                {
+                  type: "text",
+                  text: `Look at this medicine strip or packaging image.
+Extract the medicine name printed on it.
+Reply with ONLY the medicine name — no extra words, no punctuation, no explanation.
+Example reply: Dolo 650`
+                }
+              ]
+            }
+          ],
+          max_tokens: 50,
+          temperature: 0.1
+        })
+      }
     );
 
-    const rawText =
-      data?.candidates?.[0]
-        ?.content?.parts?.[0]
-        ?.text || "";
+    const data = await response.json();
 
-    console.log(
-      "RAW TEXT:",
-      rawText
-    );
+    console.log("GROQ SCAN RESPONSE:", JSON.stringify(data, null, 2));
 
     const medicineName =
-      rawText
-        .split("\n")[0]
-        .trim();
+      data?.choices?.[0]
+        ?.message?.content
+        ?.trim() || "";
 
     return res.status(200).json({
-  medicineName
-});
+      medicineName,
+      raw: data
+    });
 
-  }
+  } catch (error) {
 
-  catch (error) {
-
-    console.error(error);
+    console.error("Scan error:", error);
 
     return res.status(500).json({
-      error:
-        error.message
+      error: "Scan failed",
+      medicineName: ""
     });
 
   }

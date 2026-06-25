@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Medicine Result</title>
+<html><head>
+  <title>Medicine Result - Meditips</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -20,11 +18,38 @@
     <p id="telugu"></p>
   </div>
 
+  <!-- ===== CHATBOT SECTION ===== -->
+  <div class="chatbot-section">
+
+    <div class="chatbot-header">
+      <span>🤖</span>
+      <h3>Ask about this medicine</h3>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-bubble bot-bubble">
+        👋 Hi! I can answer your questions about this medicine. Try asking:
+        <br><br>
+        • "What are the side effects?"<br>
+        • "Can I take this on empty stomach?"<br>
+        • "What is the dosage?"<br>
+        • "Can diabetics take this?" (Telugu/Hindi ok too!)
+      </div>
+    </div>
+
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Ask a question about this medicine..." autocomplete="off">
+      <button id="chatSendBtn">Send</button>
+    </div>
+
+  </div>
+  <!-- ===== END CHATBOT SECTION ===== -->
+
 </div>
 
-<script
-type="module"
-src="../js/result.js">
-</script>
-</body>
-</html>
+<script type="module" src="../js/result.js"></script>
+<script type="module" src="../js/chatbot.js"></script>
+
+
+
+</body></html>
