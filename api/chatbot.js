@@ -12,10 +12,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing userMessage or medicineName" });
     }
 
-    // Build messages array (Groq uses OpenAI-compatible format)
     const messages = [];
 
-    // System prompt — sets the chatbot context
     messages.push({
       role: "system",
       content: `You are a helpful medical assistant chatbot for the MediTips app.
@@ -25,23 +23,14 @@ Always respond in the same language the user writes in (English, Telugu, or Hind
 Keep answers concise (3-5 lines max). Add a disclaimer if giving medical advice.`
     });
 
-    // Add conversation history (previous turns) for multi-turn context
     if (conversationHistory && Array.isArray(conversationHistory)) {
       for (const turn of conversationHistory) {
-        messages.push({
-          role: turn.role,   // "user" or "assistant"
-          content: turn.text
-        });
+        messages.push({ role: turn.role, content: turn.text });
       }
     }
 
-    // Add the latest user message
-    messages.push({
-      role: "user",
-      content: userMessage
-    });
+    messages.push({ role: "user", content: userMessage });
 
-    // Call Groq API (OpenAI-compatible endpoint)
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -51,7 +40,7 @@ Keep answers concise (3-5 lines max). Add a disclaimer if giving medical advice.
           "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
         },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",  // Free model on Groq
+          model: "qwen/qwen3.6-27b",   // ✅ Latest chat model
           messages,
           max_tokens: 512,
           temperature: 0.7
@@ -61,18 +50,19 @@ Keep answers concise (3-5 lines max). Add a disclaimer if giving medical advice.
 
     const data = await response.json();
 
-    const reply =
-      data?.choices?.[0]
-        ?.message?.content
-        ?.trim() || "Sorry, I could not understand that. Please try again.";
+    if (data.error) {
+      console.error("Groq API Error:", data.error);
+      return res.status(200).json({ reply: "Sorry, I could not get a response. Please try again." });
+    }
+
+    const reply = data?.choices?.[0]?.message?.content?.trim()
+      || "Sorry, I could not understand that. Please try again.";
 
     return res.status(200).json({ reply });
 
   } catch (error) {
     console.error("Chatbot error:", error);
-    return res.status(200).json({
-      reply: "Sorry, something went wrong. Please try again."
-    });
+    return res.status(200).json({ reply: "Sorry, something went wrong. Please try again." });
   }
 
 }

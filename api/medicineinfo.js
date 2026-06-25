@@ -13,7 +13,7 @@ export default async function handler(req, res) {
           "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
         },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
+          model: "qwen/qwen3.6-27b",   // ✅ Latest chat model (replaces llama-3.3-70b)
           messages: [
             {
               role: "system",
@@ -42,28 +42,26 @@ Reply ONLY in this exact JSON format:
 
     const data = await response.json();
 
-    const text =
-      data?.choices?.[0]
-        ?.message?.content
-        ?.trim() || "{}";
+    if (data.error) {
+      console.error("Groq API Error:", data.error);
+      return res.status(200).json({
+        uses: "Medicine information unavailable",
+        teluguExplanation: "ఈ మందు గురించి సమాచారం ప్రస్తుతం అందుబాటులో లేదు."
+      });
+    }
 
-    // Clean up any accidental markdown fences
-    const cleaned = text
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
+    const text = data?.choices?.[0]?.message?.content?.trim() || "{}";
+    const cleaned = text.replace(/```json/g, "").replace(/```/g, "").trim();
 
     return res.status(200).json(JSON.parse(cleaned));
 
   } catch (error) {
-
     console.error(error);
-
     return res.status(200).json({
       uses: "Medicine information unavailable",
       teluguExplanation: "ఈ మందు గురించి సమాచారం ప్రస్తుతం అందుబాటులో లేదు."
     });
-
   }
 
 }
+
