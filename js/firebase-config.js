@@ -4,7 +4,13 @@ import {
   getAuth,
   GoogleAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+export const auth =
+  getAuth(app);
 
+export const provider =
+  new GoogleAuthProvider();
+export const db =
+  getFirestore(app);
 import {
   getFirestore
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
