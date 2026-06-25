@@ -1,19 +1,16 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 
 import {
   getAuth,
   GoogleAuthProvider
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-export const auth =
-  getAuth(app);
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-export const provider =
-  new GoogleAuthProvider();
-export const db =
-  getFirestore(app);
 import {
   getFirestore
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDAmNN_NFoRUM-a1ycEzwX-aG9b8JZTNjM",
@@ -25,13 +22,19 @@ const firebaseConfig = {
   measurementId: "G-3S4W6QWDGJ"
 };
 
-const app = initializeApp(firebaseConfig);
+const app =
+  initializeApp(
+    firebaseConfig
+  );
 
-const auth = getAuth(app);
+const auth =
+  getAuth(app);
 
-const db = getFirestore(app);
+const db =
+  getFirestore(app);
 
-const provider = new GoogleAuthProvider();
+const provider =
+  new GoogleAuthProvider();
 
 export {
   app,
