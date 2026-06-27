@@ -116,62 +116,79 @@ cursor:pointer;
 </style>
 
 </head>
-
 <body>
 
 <div class="header">
 
-<h2>
+    <h2>🤖 Meditips AI</h2>
 
-🤖 Meditips AI
-
-</h2>
-
-<p>
-
-Ask anything about medicines
-
-</p>
+    <p>Your Personal AI Medicine Assistant</p>
 
 </div>
 
-<div
-class="chat"
-id="chatBox">
+<div id="chatBox" class="chat-box">
 
-<div class="message">
+    <div class="ai-message">
 
-👋 Hello!
+        <div class="avatar">
+            🤖
+        </div>
 
-I'm your AI Health Assistant.
+        <div class="bubble">
 
-Ask me anything about medicines.
+            <strong>Meditips AI</strong>
 
-</div>
+            <br><br>
 
-</div>
+            Hi 👋
 
-<div class="bottom">
+            Ask me anything about your scanned medicine.
 
-<input
-id="question"
-placeholder="Ask about medicines...">
+        </div>
 
-<button
-id="sendBtn">
-
-➤
-
-</button>
+    </div>
 
 </div>
 
-<script
-type="module"
-src="../js/assistant.js">
+<div class="suggestions">
 
-</script>
+    <button class="suggestion">
+        What is this medicine used for?
+    </button>
+
+    <button class="suggestion">
+        Side effects
+    </button>
+
+    <button class="suggestion">
+        Can I take it after food?
+    </button>
+
+    <button class="suggestion">
+        Any precautions?
+    </button>
+
+</div>
+
+<div class="input-area">
+
+    <input
+        id="question"
+        type="text"
+        placeholder="Ask Meditips AI..." />
+
+    <button id="sendBtn">
+
+        ➤
+
+    </button>
+
+</div>
+
+<script type="module"
+src="../js/assistant.js"></script>
 
 </body>
+
 
 </html>
