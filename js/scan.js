@@ -1,3 +1,12 @@
+import { db, auth }
+from "./firebase-config.js";
+
+import {
+  addDoc,
+  collection,
+  serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 const imageInput = document.getElementById("medicineImage");
 const previewImage = document.getElementById("previewImage");
 
@@ -54,6 +63,24 @@ document.getElementById("scanBtn").addEventListener("click", async () => {
     else if (detected.includes("telma"))    medicineId = "telma40";
 
     localStorage.setItem("medicineId", medicineId || "unknown");
+    if (auth.currentUser) {
+    await addDoc(
+  collection(
+    db,
+    "history"
+  ),
+  {
+    uid:
+      auth.currentUser.uid,
+
+    medicineName:
+      data.medicineName,
+
+    scannedAt:
+      serverTimestamp()
+  }
+);
+    }
     window.location.href = "result.html";
 
   } catch (error) {
