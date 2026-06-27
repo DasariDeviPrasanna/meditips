@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Sign Up - Meditips</title>
+
+<link rel="stylesheet"
+href="../css/style.css">
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f4f8fb;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+height:100vh;
+
+}
+
+.signup-card{
+
+width:380px;
+
+background:white;
+
+padding:35px;
+
+border-radius:20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+
+text-align:center;
+
+}
+
+.logo{
+
+font-size:55px;
+
+}
+
+.input{
+
+margin-top:15px;
+text-align:left;
+
+}
+
+.input label{
+
+display:block;
+font-weight:bold;
+margin-bottom:6px;
+
+}
+
+.input input{
+
+width:100%;
+padding:12px;
+
+border-radius:10px;
+
+border:1px solid #ccc;
+
+font-size:15px;
+
+box-sizing:border-box;
+
+}
+
+.signup-btn{
+
+margin-top:20px;
+
+width:100%;
+
+padding:13px;
+
+border:none;
+
+background:#2563eb;
+
+color:white;
+
+font-size:16px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+}
+
+.google-btn{
+
+margin-top:15px;
+
+width:100%;
+
+padding:13px;
+
+background:white;
+
+border:1px solid #ddd;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-size:15px;
+
+}
+
+.divider{
+
+margin:20px 0;
+color:#777;
+
+}
+
+.login{
+
+margin-top:20px;
+
+}
+
+.login a{
+
+text-decoration:none;
+color:#2563eb;
+font-weight:bold;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="signup-card">
+
+<div class="logo">
+
+💊
+
+</div>
+
+<h2>
+
+Create Account
+
+</h2>
+
+<p>
+
+Join Meditips today
+
+</p>
+
+<div class="input">
+
+<label>
+
+Full Name
+
+</label>
+
+<input
+type="text"
+id="name"
+placeholder="Enter your name">
+
+</div>
+
+<div class="input">
+
+<label>
+
+Email
+
+</label>
+
+<input
+type="email"
+id="email"
+placeholder="Enter your email">
+
+</div>
+
+<div class="input">
+
+<label>
+
+Password
+
+</label>
+
+<input
+type="password"
+id="password"
+placeholder="Create password">
+
+</div>
+
+<div class="input">
+
+<label>
+
+Confirm Password
+
+</label>
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm password">
+
+</div>
+
+<button
+class="signup-btn"
+id="signupBtn">
+
+Create Account
+
+</button>
+
+<div class="divider">
+
+OR
+
+</div>
+
+<button
+class="google-btn"
+id="googleLoginBtn">
+
+Continue with Google
+
+</button>
+
+<div class="login">
+
+Already have an account?
+
+<a href="login.html">
+
+Login
+
+</a>
+
+</div>
+
+</div>
+
+<script
+type="module"
+src="../js/signup.js"></script>
+
+<script
+type="module"
+src="../js/auth.js"></script>
+
+</body>
+
+</html>

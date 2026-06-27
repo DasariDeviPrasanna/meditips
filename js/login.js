@@ -1,44 +1,98 @@
 import {
-  auth,
-  provider
-}
-from "./firebase-config.js";
+  auth
+} from "./firebase-config.js";
 
 import {
-  signInWithPopup
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-document
-.getElementById(
-  "googleLogin"
-)
-.addEventListener(
+const loginBtn =
+document.getElementById(
+  "loginBtn"
+);
+
+loginBtn?.addEventListener(
   "click",
   async () => {
 
-    try {
+    const email =
+      document
+      .getElementById(
+        "email"
+      )
+      .value
+      .trim();
 
-      const result =
-        await signInWithPopup(
-          auth,
-          provider
-        );
+    const password =
+      document
+      .getElementById(
+        "password"
+      )
+      .value;
 
-      const user =
-        result.user;
+    if (!email || !password) {
 
-      console.log(user);
+      alert(
+        "Please enter email and password."
+      );
 
-      window.location.href =
-        "index.html";
+      return;
 
     }
 
-    catch(error) {
+    try {
 
-      console.log(error);
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      alert(
+        "Login Successful!"
+      );
+
+      window.location.href =
+        "dashboard.html";
+
+    }
+
+    catch(error){
+
+      console.error(error);
+
+      switch(error.code){
+
+        case "auth/user-not-found":
+          alert(
+            "User not found."
+          );
+          break;
+
+        case "auth/wrong-password":
+          alert(
+            "Incorrect password."
+          );
+          break;
+
+        case "auth/invalid-email":
+          alert(
+            "Invalid email."
+          );
+          break;
+
+        case "auth/invalid-credential":
+          alert(
+            "Invalid email or password."
+          );
+          break;
+
+        default:
+          alert(
+            error.message
+          );
+
+      }
 
     }
 
