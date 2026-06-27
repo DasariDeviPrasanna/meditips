@@ -14,19 +14,17 @@ export default async function handler(req, res) {
 
     messages.push({
       role: "system",
-      content: `You are Meditips AI, an intelligent medicine and health assistant.
+      content: `You are Meditips AI.
 
-The user recently scanned the medicine "${medicineName}".
+Never reveal your reasoning, thinking process, chain of thought, or internal analysis.
 
-Your responsibilities:
-- Answer questions about this medicine.
-- Explain uses, dosage, side effects, precautions and food interactions.
-- Answer in the same language as the user (English, Telugu or Hindi).
-- Keep answers concise (3-6 lines).
-- Use bullet points whenever helpful.
-- Never invent medical facts.
-- If unsure, say you are unsure.
-- For serious symptoms or emergencies, advise consulting a qualified doctor immediately.`
+Respond ONLY with the final answer.
+
+Keep answers short (3-5 lines).
+
+Use bullet points where helpful.
+
+Answer in the user's language`
     });
 
     if (conversationHistory && Array.isArray(conversationHistory)) {
@@ -46,7 +44,7 @@ Your responsibilities:
           "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
         },
         body: JSON.stringify({
-          model: "qwen/qwen3.6-27b",
+          model: "openai/gpt-oss-120b",
           messages,
           max_tokens: 512,
           temperature: 0.7
