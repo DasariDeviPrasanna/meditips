@@ -14,18 +14,25 @@
 </head>
 
 <body>
-
 <div class="dashboard">
 
     <!-- Header -->
 
-    <div class="dashboard-header">
+    <div class="top-bar">
 
         <div>
 
-            <h1>👋 Welcome</h1>
+            <h1 id="welcomeText">
 
-            <p>Your AI Health Companion</p>
+                👋 Good Evening
+
+            </h1>
+
+            <p>
+
+                Your AI Health Companion
+
+            </p>
 
         </div>
 
@@ -40,15 +47,20 @@
     <!-- AI Search -->
 
     <div
-    class="search-card"
+    class="search-box"
     onclick="location.href='assistant.html'">
 
-        <input
-        type="text"
-        placeholder="Ask Meditips AI anything..."
-        readonly>
+        <span>
 
-        <span>🤖</span>
+            🔍
+
+        </span>
+
+        <p>
+
+            Ask Meditips AI...
+
+        </p>
 
     </div>
 
@@ -59,22 +71,36 @@
     class="scan-card"
     onclick="location.href='scan.html'">
 
-        <h2>📷 Scan Medicine</h2>
+        <div>
 
-        <p>
+            <h2>
 
-            Scan medicine strips instantly using AI.
+                📷 Scan Medicine
 
-        </p>
+            </h2>
+
+            <p>
+
+                Scan medicine strips instantly using AI.
+
+            </p>
+
+        </div>
+
+        <span>
+
+            ➜
+
+        </span>
 
     </div>
 
 
-    <!-- Statistics -->
+    <!-- Stats -->
 
-    <h2 class="section-title">
+    <h2 class="title">
 
-        📊 Your Activity
+        Activity
 
     </h2>
 
@@ -82,11 +108,11 @@
 
         <div class="stat-card">
 
-            <h3 id="scanCount">
+            <h1 id="scanCount">
 
                 0
 
-            </h3>
+            </h1>
 
             <p>
 
@@ -98,11 +124,11 @@
 
         <div class="stat-card">
 
-            <h3 id="chatCount">
+            <h1 id="chatCount">
 
                 0
 
-            </h3>
+            </h1>
 
             <p>
 
@@ -112,51 +138,43 @@
 
         </div>
 
-        
-
     </div>
 
 
     <!-- Recent -->
 
-    <h2 class="section-title">
+    <h2 class="title">
 
-        🕒 Recent Activity
+        Recent Activity
 
     </h2>
 
-    <div id="recentActivity">
+    <div
+    id="recentActivity"
+    class="recent-card">
 
-        <div class="activity">
-
-            No recent activity
-
-        </div>
+        Loading...
 
     </div>
 
 
-    <!-- Health Tip -->
-
-    <h2 class="section-title">
-
-        💡 Health Tip
-
-    </h2>
+    <!-- Tip -->
 
     <div class="tip-card">
 
-        Drink enough water 💧
+        💡
 
-        Staying hydrated helps your body absorb medicines effectively.
+        Stay hydrated today and take medicines only as prescribed.
 
     </div>
 
 </div>
 
-<script type="module" src="../js/dashboard.js"></script>
+<script type="module"
+src="../js/dashboard.js"></script>
 
-<script type="module" src="../js/navbar.js"></script>
+<script type="module"
+src="../js/navbar.js"></script>
 
 </body>
 
