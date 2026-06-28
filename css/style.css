@@ -698,3 +698,46 @@ cursor:pointer;
 font-weight:bold;
 
 }
+.dashboard-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin:25px;
+
+}
+
+.dashboard-header h1{
+
+margin:0;
+
+font-size:38px;
+
+}
+
+.dashboard-header p{
+
+margin-top:8px;
+
+color:#666;
+
+}
+
+.user-photo{
+
+width:60px;
+
+height:60px;
+
+border-radius:50%;
+
+border:3px solid #2563eb;
+
+object-fit:cover;
+
+cursor:pointer;
+
+}

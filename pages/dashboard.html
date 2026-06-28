@@ -1,63 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Meditips Dashboard</title>
+
 <link rel="stylesheet" href="../css/style.css">
-<link rel="stylesheet"
-href="../css/navbar.css">
+<link rel="stylesheet" href="../css/navbar.css">
+
 </head>
+
 <body>
+
 <div class="dashboard">
 
-    <h1>💊 Meditips</h1>
+    <!-- Header -->
 
-    <p>Know your medicines instantly</p>
+    <div class="dashboard-header">
 
-    <div class="cards">
+        <div>
 
-        <div class="card"
-        onclick="location.href='scan.html'">
-            <h2>📷</h2>
-            <h3>Scan Medicine</h3>
+            <h1>👋 Welcome</h1>
+
+            <p>Your AI Health Companion</p>
+
         </div>
 
-        <div class="card" onclick="location.href='assistant.html'">
+        <img
+        id="userPhoto"
+        class="profile-photo"
+        src="https://ui-avatars.com/api/?name=User">
 
-    <h2>🤖</h2>
+    </div>
 
-    <h3>AI Assistant</h3>
 
-</div>
+    <!-- AI Search -->
 
-        <div class="card" onclick="location.href='history.html'">
-            <h2>📜</h2>
-            <h3>History</h3>
+    <div
+    class="search-card"
+    onclick="location.href='assistant.html'">
+
+        <input
+        type="text"
+        placeholder="Ask Meditips AI anything..."
+        readonly>
+
+        <span>🤖</span>
+
+    </div>
+
+
+    <!-- Quick Scan -->
+
+    <div
+    class="scan-card"
+    onclick="location.href='scan.html'">
+
+        <h2>📷 Scan Medicine</h2>
+
+        <p>
+
+            Scan medicine strips instantly using AI.
+
+        </p>
+
+    </div>
+
+
+    <!-- Statistics -->
+
+    <h2 class="section-title">
+
+        📊 Your Activity
+
+    </h2>
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <h3 id="scanCount">
+
+                0
+
+            </h3>
+
+            <p>
+
+                Scans
+
+            </p>
+
         </div>
 
-        <div class="card">
-            <h2>👤</h2>
-            <h3>Profile</h3>
+        <div class="stat-card">
+
+            <h3 id="chatCount">
+
+                0
+
+            </h3>
+
+            <p>
+
+                AI Chats
+
+            </p>
+
+        </div>
+
+        
+
+    </div>
+
+
+    <!-- Recent -->
+
+    <h2 class="section-title">
+
+        🕒 Recent Activity
+
+    </h2>
+
+    <div id="recentActivity">
+
+        <div class="activity">
+
+            No recent activity
+
         </div>
 
     </div>
 
-    <button id="logoutBtn">
-        Logout
-    </button>
+
+    <!-- Health Tip -->
+
+    <h2 class="section-title">
+
+        💡 Health Tip
+
+    </h2>
+
+    <div class="tip-card">
+
+        Drink enough water 💧
+
+        Staying hydrated helps your body absorb medicines effectively.
+
+    </div>
 
 </div>
 
-<script type="module"
-src="../js/protect.js"></script>
+<script type="module" src="../js/dashboard.js"></script>
 
-<script type="module"
-src="../js/logout.js"></script>
-<script
-type="module"
-src="../js/navbar.js">
-</script>
-     
+<script type="module" src="../js/navbar.js"></script>
+
 </body>
+
 </html>
