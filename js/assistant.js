@@ -1,156 +1,251 @@
+import {
+    db,
+    auth
+} from "./firebase-config.js";
+
+import {
+    addDoc,
+    collection,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 const chatBox = document.getElementById("chatBox");
 const questionInput = document.getElementById("question");
 const sendBtn = document.getElementById("sendBtn");
+const newChatBtn = document.getElementById("newChatBtn");
+
+let conversationHistory = [];
 
 // Send Button
 sendBtn.addEventListener("click", sendMessage);
 
+// New Chat
+newChatBtn?.addEventListener("click", () => {
+
+    conversationHistory = [];
+
+    chatBox.innerHTML = `
+        <div class="ai-message">
+
+            <div class="avatar">🤖</div>
+
+            <div class="bubble">
+
+                <strong>Meditips AI</strong>
+
+                <br><br>
+
+                👋 Hello!
+
+                I'm your AI Health Assistant.
+
+                Ask me anything about medicines.
+
+            </div>
+
+        </div>
+    `;
+
+});
+
 // Enter Key
 questionInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    sendMessage();
-  }
+
+    if (e.key === "Enter") {
+
+        sendMessage();
+
+    }
+
 });
 
 // Suggested Questions
 document.querySelectorAll(".suggestion").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    questionInput.value = btn.innerText;
-    sendMessage();
-  });
+
+    btn.addEventListener("click", () => {
+
+        questionInput.value = btn.innerText;
+
+        sendMessage();
+
+    });
+
 });
 
-// Add User Bubble
+// User Bubble
 function addUserMessage(text) {
 
-  chatBox.innerHTML += `
+    chatBox.innerHTML += `
 
-    <div class="user-message">
+        <div class="user-message">
 
-      <div class="bubble">
+            <div class="bubble">
 
-        ${text}
+                ${text}
 
-      </div>
+            </div>
 
-      <div class="avatar">
+            <div class="avatar">
 
-        👤
+                👤
 
-      </div>
+            </div>
 
-    </div>
+        </div>
 
-  `;
+    `;
 
 }
 
-// Add AI Bubble
+// AI Bubble
 function addAIMessage(text) {
 
-  chatBox.innerHTML += `
+    chatBox.innerHTML += `
 
-    <div class="ai-message">
+        <div class="ai-message">
 
-      <div class="avatar">
+            <div class="avatar">
 
-        🤖
+                🤖
 
-      </div>
+            </div>
 
-      <div class="bubble">
+            <div class="bubble">
 
-        ${text}
+                ${text}
 
-      </div>
+            </div>
 
-    </div>
+        </div>
 
-  `;
+    `;
 
 }
 
 async function sendMessage() {
 
-  const question = questionInput.value.trim();
+    const question = questionInput.value.trim();
 
-  if (!question) return;
+    if (!question) return;
 
-  addUserMessage(question);
+    addUserMessage(question);
 
-  questionInput.value = "";
+    questionInput.value = "";
 
-  // Thinking Bubble
-  const loading = document.createElement("div");
+    const loading = document.createElement("div");
 
-  loading.className = "ai-message";
+    loading.className = "ai-message";
 
-  loading.innerHTML = `
+    loading.innerHTML = `
 
-    <div class="avatar">
+        <div class="avatar">
 
-      🤖
+            🤖
 
-    </div>
+        </div>
 
-    <div class="bubble">
+        <div class="bubble">
 
-      ⏳ Thinking...
+            ⏳ Thinking...
 
-    </div>
+        </div>
 
-  `;
+    `;
 
-  chatBox.appendChild(loading);
-
-  chatBox.scrollTop = chatBox.scrollHeight;
-
-  try {
-
-    const response = await fetch("/api/chatbot", {
-
-      method: "POST",
-
-      headers: {
-
-        "Content-Type": "application/json"
-
-      },
-
-      body: JSON.stringify({
-
-        userMessage: question,
-
-        medicineName:
-          localStorage.getItem("medicineName") || "Unknown Medicine",
-
-        conversationHistory: []
-
-      })
-
-    });
-
-    const data = await response.json();
-
-    loading.remove();
-
-    addAIMessage(data.reply);
+    chatBox.appendChild(loading);
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
-  }
+    try {
 
-  catch (error) {
+        const response = await fetch("/api/chatbot", {
 
-    loading.remove();
+            method: "POST",
 
-    addAIMessage(
-      "❌ Unable to connect. Please try again."
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                userMessage: question,
+
+                medicineName: localStorage.getItem("medicineName") || "Unknown Medicine",
+
+                conversationHistory
+
+            })
+
+        });
+
+        const data = await response.json();
+
+        if (loading.parentNode) {
+
+            loading.parentNode.removeChild(loading);
+
+        }
+
+        addAIMessage(data.reply);
+        if (auth.currentUser) {
+
+    await addDoc(
+
+        collection(db, "chatHistory"),
+
+        {
+
+            uid: auth.currentUser.uid,
+
+            medicineName:
+                localStorage.getItem("medicineName") || "General",
+
+            userMessage: question,
+
+            aiReply: data.reply,
+
+            createdAt: serverTimestamp()
+
+        }
+
     );
-
-    console.error(error);
-
-  }
 
 }
 
+        // Save conversation
+        conversationHistory.push({
+
+            role: "user",
+
+            text: question
+
+        });
+
+        conversationHistory.push({
+
+            role: "assistant",
+
+            text: data.reply
+
+        });
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+    }
+
+    catch (error) {
+
+        if (loading.parentNode) {
+
+            loading.parentNode.removeChild(loading);
+
+        }
+
+        addAIMessage("❌ Unable to connect. Please try again.");
+
+        console.error(error);
+
+    }
+
+}
