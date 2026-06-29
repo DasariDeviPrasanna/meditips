@@ -1,101 +1,41 @@
-import { db, auth }
-from "./firebase-config.js";
+import { db, auth } from "./firebase-config.js";
 
 import {
-  addDoc,
-  collection,
-  serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-const imageInput = document.getElementById("medicineImage");
-const previewImage = document.getElementById("previewImage");
+    addDoc,
+    collection,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-imageInput.addEventListener("change", (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-  previewImage.src = URL.createObjectURL(file);
-  previewImage.style.display = "block";
-});
+// Elements
 
-function fileToBase64(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(",")[1]);
-    reader.readAsDataURL(file);
-  });
-}
+const imageInput =
+document.getElementById("imageInput");
 
-document.getElementById("scanBtn").addEventListener("click", async () => {
-  const file = imageInput.files[0];
+const previewImage =
+document.getElementById("previewImage");
 
-  if (!file) {
-    alert("Please select an image");
-    return;
-  }
+const statusIcon =
+document.getElementById("statusIcon");
 
-  try {
-    const base64 = await fileToBase64(file);
+const imageStatus =
+document.getElementById("imageStatus");
 
-    const response = await fetch("/api/scan", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ image: base64, mimeType: file.type })
-    });
-
-    const data = await response.json();
-    console.log("Scan Response:", data);
-
-    if (!data || !data.medicineName) {
-      alert("Medicine name not detected. Please try a clearer image.");
-      return;
-    }
-
-    localStorage.setItem("medicineName", data.medicineName);
-
-    const detected = data.medicineName.toLowerCase();
-    let medicineId = "";
-
-    if (detected.includes("dolo"))          medicineId = "dolo650";
-    else if (detected.includes("crocin"))   medicineId = "crocin";
-    else if (detected.includes("azee"))     medicineId = "azee500";
-    else if (detected.includes("pantocid")) medicineId = "pantocid40";
-    else if (detected.includes("augmentin")) medicineId = "augmentin625";
-    else if (detected.includes("telma"))    medicineId = "telma40";
-
-    localStorage.setItem("medicineId", medicineId || "unknown");
-    if (auth.currentUser) {
-    await addDoc(
-  collection(
-    db,
-    "history"
-  ),
-  {
-    uid:
-      auth.currentUser.uid,
-
-    medicineName:
-      data.medicineName,
-
-    scannedAt:
-      serverTimestamp()
-  }
-);
-    }
-    window.location.href = "result.html";
-
-  } catch (error) {
-    console.error("Scan Error:", error);
-    alert("Scan Failed. Please try again.");
-  }
-});
 const cameraBtn =
 document.getElementById("cameraBtn");
 
 const galleryBtn =
 document.getElementById("galleryBtn");
 
-const imageInput =
-document.getElementById("imageInput");
+const scanBtn =
+document.getElementById("scanBtn");
+
+const loadingOverlay =
+document.getElementById("loadingOverlay");
+
+const loadingText =
+document.getElementById("loadingText");
+
+// Camera
 
 cameraBtn.addEventListener("click",()=>{
 
@@ -108,6 +48,8 @@ cameraBtn.addEventListener("click",()=>{
 
 });
 
+// Gallery
+
 galleryBtn.addEventListener("click",()=>{
 
     imageInput.removeAttribute(
@@ -115,5 +57,163 @@ galleryBtn.addEventListener("click",()=>{
     );
 
     imageInput.click();
+
+});
+
+// Preview
+
+imageInput.addEventListener("change",(event)=>{
+
+    const file =
+    event.target.files[0];
+
+    if(!file) return;
+
+    previewImage.src =
+    URL.createObjectURL(file);
+
+    statusIcon.textContent =
+    "✅";
+
+    imageStatus.textContent =
+    "Ready to Scan";
+
+});
+
+// Convert Image
+
+function fileToBase64(file){
+
+    return new Promise((resolve)=>{
+
+        const reader =
+        new FileReader();
+
+        reader.onload=()=>{
+
+            resolve(
+                reader.result.split(",")[1]
+            );
+
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
+
+// Scan
+
+scanBtn.addEventListener("click",async()=>{
+
+    const file =
+    imageInput.files[0];
+
+    if(!file){
+
+        alert("Please select a medicine image.");
+
+        return;
+
+    }
+
+    try{
+
+        loadingOverlay.style.display =
+        "flex";
+
+        loadingText.textContent =
+        "🔍 Detecting Medicine...";
+
+        const base64 =
+        await fileToBase64(file);
+
+        const response =
+        await fetch("/api/scan",{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                image:base64,
+
+                mimeType:file.type
+
+            })
+
+        });
+
+        const data =
+        await response.json();
+
+        if(!data.medicineName){
+
+            loadingOverlay.style.display =
+            "none";
+
+            alert("Medicine not detected.");
+
+            return;
+
+        }
+
+        loadingText.textContent =
+        "🧠 Preparing Medicine Report...";
+
+        localStorage.setItem(
+            "medicineName",
+            data.medicineName
+        );
+
+        if(auth.currentUser){
+
+            await addDoc(
+
+                collection(db,"history"),
+
+                {
+
+                    uid:
+                    auth.currentUser.uid,
+
+                    medicineName:
+                    data.medicineName,
+
+                    scannedAt:
+                    serverTimestamp()
+
+                }
+
+            );
+
+        }
+
+        loadingText.textContent =
+        "✅ Opening Result...";
+
+        setTimeout(()=>{
+
+            window.location.href =
+            "result.html";
+
+        },700);
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        loadingOverlay.style.display =
+        "none";
+
+        alert("Scan failed. Please try again.");
+
+    }
 
 });
