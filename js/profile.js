@@ -1,139 +1,118 @@
 import {
-  auth,
-  db
+    auth,
+    db
 } from "./firebase-config.js";
 
 import {
-  onAuthStateChanged,
-  updateProfile
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 import {
-  doc,
-  getDoc,
-  updateDoc
+    collection,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-const photo =
-document.getElementById(
-  "photo"
-);
+const profilePhoto =
+document.getElementById("profilePhoto");
 
-const name =
-document.getElementById(
-  "name"
-);
+const profileName =
+document.getElementById("profileName");
 
-const email =
-document.getElementById(
-  "email"
-);
+const profileEmail =
+document.getElementById("profileEmail");
 
-const editBtn =
-document.getElementById(
-  "editProfile"
-);
+const totalScans =
+document.getElementById("totalScans");
 
-onAuthStateChanged(
-  auth,
-  async(user)=>{
+const totalChats =
+document.getElementById("totalChats");
+
+const logoutBtn =
+document.getElementById("logoutBtn");
+
+onAuthStateChanged(auth, async(user)=>{
 
     if(!user){
 
-      window.location.href =
-      "login.html";
+        window.location.href =
+        "login.html";
 
-      return;
-
-    }
-
-    photo.src =
-      user.photoURL ||
-      "https://ui-avatars.com/api/?name=User";
-
-    name.innerText =
-      user.displayName ||
-      "User";
-
-    email.innerText =
-      user.email;
-
-    const userRef =
-      doc(
-        db,
-        "users",
-        user.uid
-      );
-
-    const snap =
-      await getDoc(
-        userRef
-      );
-
-    if(
-      snap.exists()
-    ){
-
-      const data =
-        snap.data();
-
-      if(data.name){
-
-        name.innerText =
-        data.name;
-
-      }
+        return;
 
     }
 
-    editBtn.onclick =
-    async()=>{
+    // User Info
 
-      const newName =
-      prompt(
-      "Enter your name",
-      name.innerText
-      );
+    profileName.textContent =
+    user.displayName || "User";
 
-      if(!newName)
-      return;
+    profileEmail.textContent =
+    user.email;
 
-      try{
+    profilePhoto.src =
+    user.photoURL ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}`;
 
-        await updateProfile(
-          auth.currentUser,
-          {
-            displayName:
-            newName
-          }
+    try{
+
+        // Scan Count
+
+        const scanQuery =
+        query(
+
+            collection(db,"history"),
+
+            where("uid","==",user.uid)
+
         );
 
-        await updateDoc(
-          userRef,
-          {
-            name:
-            newName
-          }
+        const scanSnapshot =
+        await getDocs(scanQuery);
+
+        totalScans.textContent =
+        scanSnapshot.size;
+
+        // Chat Count
+
+        const chatQuery =
+        query(
+
+            collection(db,"chatHistory"),
+
+            where("uid","==",user.uid)
+
         );
 
-        name.innerText =
-        newName;
+        const chatSnapshot =
+        await getDocs(chatQuery);
 
-        alert(
-        "Profile Updated"
-        );
+        totalChats.textContent =
+        chatSnapshot.size;
 
-      }
+    }
 
-      catch(error){
+    catch(error){
 
-        console.error(
-        error
-        );
+        console.error(error);
 
-      }
+    }
 
-    };
+});
 
-  }
-);
+// Logout
+
+logoutBtn.addEventListener(
+
+"click",
+
+async()=>{
+
+    await signOut(auth);
+
+    window.location.href =
+    "login.html";
+
+});

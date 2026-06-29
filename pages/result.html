@@ -10,7 +10,28 @@
 <body>
 
 <div class="result-container">
-  <h1 id="medicineName"></h1>
+<div class="medicine-header">
+
+    <div>
+
+        <h1 id="medicineName"></h1>
+
+        <p class="medicine-subtitle">
+
+            AI Medicine Analysis
+
+        </p>
+
+    </div>
+
+    <button id="favoriteBtn">
+
+        ❤️
+
+    </button>
+
+</div>
+
 
   <div class="card">
     <h3>Uses</h3>
@@ -21,26 +42,75 @@
     <h3>Telugu Explanation</h3>
     <p id="telugu"></p>
   </div>
+<div class="card">
 
-  <div class="chatbot-section">
-    <div class="chatbot-header">
-      <span>🤖</span>
-      <h3>Ask about this medicine</h3>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="chat-bubble bot-bubble">
-        👋 Hi! Ask me anything about this medicine!<br><br>
-        • "What are the side effects?"<br>
-        • "Can I take on empty stomach?"<br>
-        • "What is the dosage?"
-      </div>
-    </div>
-    <div class="chat-input-row">
-      <input type="text" id="chatInput" placeholder="Ask a question..." autocomplete="off">
-      <button id="chatSendBtn">Send</button>
-    </div>
-  </div>
+    <h3>⚠ Side Effects</h3>
+
+    <p id="sideEffects">
+
+        Loading...
+
+    </p>
+
 </div>
+
+<div class="card">
+
+    <h3>🥗 Diet Recommendation</h3>
+
+    <p id="diet">
+
+        Loading...
+
+    </p>
+
+</div>
+
+<div class="card">
+
+    <h3>⏰ Dosage</h3>
+
+    <p id="dosage">
+
+        Loading...
+
+    </p>
+
+</div>
+
+<div class="card">
+
+    <h3>🚫 Warnings</h3>
+
+    <p id="warnings">
+
+        Loading...
+
+    </p>
+
+</div>
+<div class="ai-card">
+
+    <h3>
+
+        🤖 Need More Help?
+
+    </h3>
+
+    <p>
+
+        Ask Meditips AI any question about this medicine.
+
+    </p>
+
+    <button id="askAiBtn">
+
+        Open AI Assistant
+
+    </button>
+
+</div>
+  
 
 <script type="module" src="../js/result.js"></script>
 <script type="module" src="../js/chatbot.js"></script>

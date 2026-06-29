@@ -1,39 +1,95 @@
-import { getMedicine } from "./medicine-service.js";
-
 async function loadMedicine() {
 
-  const medicineId = localStorage.getItem("medicineId");
+    const medicineName =
+    localStorage.getItem("medicineName");
 
-  if (!medicineId) return;
+    if (!medicineName) {
 
-  const medicine = await getMedicine(medicineId);
+        alert("Medicine not found.");
 
-  if (!medicine) {
+        window.location.href = "scan.html";
 
-    // Medicine not in Firestore — fetch from Gemini AI
-    const medicineName = localStorage.getItem("medicineName");
+        return;
 
-    const response = await fetch("/api/medicineinfo", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ medicineName })
-    });
+    }
 
-    const aiData = await response.json();
+    try {
 
-    // Removed debug: console.log and alert() that were here before
+        const response =
+        await fetch("/api/medicineinfo", {
 
-    document.getElementById("medicineName").innerText = medicineName;
-    document.getElementById("uses").innerText = aiData.uses;
-    document.getElementById("telugu").innerText = aiData.teluguExplanation;
+            method: "POST",
 
-    return;
-  }
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-  document.getElementById("medicineName").innerText = medicine.name;
-  document.getElementById("uses").innerText = medicine.uses;
-  document.getElementById("telugu").innerText = medicine.teluguExplanation;
+            body: JSON.stringify({
+
+                medicineName
+
+            })
+
+        });
+
+        const data =
+        await response.json();
+
+        document.getElementById("medicineName").textContent =
+        medicineName;
+
+        document.getElementById("uses").textContent =
+        data.uses || "Not Available";
+
+        document.getElementById("telugu").textContent =
+        data.teluguExplanation || "అందుబాటులో లేదు";
+
+        document.getElementById("sideEffects").textContent =
+        data.sideEffects || "Not Available";
+
+        document.getElementById("diet").textContent =
+        data.diet || "Not Available";
+
+        document.getElementById("dosage").textContent =
+        data.dosage || "Consult your doctor.";
+
+        document.getElementById("warnings").textContent =
+        data.warnings || "Follow your doctor's advice.";
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("Unable to load medicine information.");
+
+    }
 
 }
 
 loadMedicine();
+
+// ❤️ Favorite
+
+const favoriteBtn =
+document.getElementById("favoriteBtn");
+
+favoriteBtn?.addEventListener("click",()=>{
+
+    favoriteBtn.innerHTML="❤️";
+
+    // Later we'll save to Firestore
+
+});
+
+// 🤖 AI
+
+const askAiBtn =
+document.getElementById("askAiBtn");
+
+askAiBtn?.addEventListener("click",()=>{
+
+    window.location.href="assistant.html";
+
+});

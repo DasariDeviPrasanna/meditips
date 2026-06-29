@@ -4,207 +4,185 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Profile</title>
 
-<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet"
+href="../css/style.css">
+
 <link rel="stylesheet"
 href="../css/navbar.css">
-<style>
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f5f7fb;
-}
-
-.profile{
-
-max-width:420px;
-margin:auto;
-padding:20px;
-
-}
-
-.header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-}
-
-.avatar{
-
-width:120px;
-height:120px;
-
-border-radius:50%;
-
-display:block;
-margin:25px auto;
-
-border:5px solid #4f8cff;
-
-object-fit:cover;
-
-}
-
-.name{
-
-text-align:center;
-
-font-size:24px;
-
-font-weight:bold;
-
-}
-
-.email{
-
-text-align:center;
-
-color:gray;
-
-margin-bottom:30px;
-
-}
-
-.item{
-
-background:white;
-
-padding:18px;
-
-margin-bottom:12px;
-
-border-radius:15px;
-
-cursor:pointer;
-
-font-size:17px;
-
-box-shadow:0 3px 10px rgba(0,0,0,.08);
-
-}
-
-.logout{
-
-background:#ff4d4f;
-
-color:white;
-
-text-align:center;
-
-}
-
-</style>
 
 </head>
 
 <body>
 
-<div class="profile">
+<div class="profile-page">
 
-<div class="header">
+    <div class="profile-header">
 
-<h2>
+        <img
+        id="profilePhoto"
+        class="profile-image"
+        src="https://ui-avatars.com/api/?name=User">
 
-👤 Profile
+        <h2 id="profileName">
 
-</h2>
+            User
 
-<a href="dashboard.html">
+        </h2>
 
-🏠
+        <p id="profileEmail">
 
-</a>
+            user@gmail.com
 
-</div>
+        </p>
 
-<img
-id="photo"
-class="avatar">
+    </div>
 
-<div
-id="name"
-class="name">
+    <div class="profile-stats">
 
-Loading...
+        <div class="profile-stat">
 
-</div>
+            <h2 id="totalScans">
 
-<div
-id="email"
-class="email">
+                0
 
-Loading...
+            </h2>
 
-</div>
+            <p>
 
-<div
-class="item"
-id="editProfile">
+                Total Scans
 
-✏ Edit Profile
+            </p>
 
-</div>
+        </div>
 
-<div
-class="item">
+        <div class="profile-stat">
 
-🌐 Language
+            <h2 id="totalChats">
 
-</div>
+                0
 
-<div
-class="item">
+            </h2>
 
-🌙 Dark Mode
+            <p>
 
-</div>
+                AI Chats
 
-<div
-class="item"
-onclick="location.href='history.html'">
+            </p>
 
-📜 Scan History
+        </div>
+
+    </div>
+<div class="settings">
+
+<div class="section-title">
+
+Health
 
 </div>
 
-<div
-class="item logout"
-id="logoutBtn">
+<div class="setting-item">
 
-🚪 Logout
+✏️
+
+<span>Edit Profile</span>
+
+</div>
+
+<div class="setting-item">
+
+🌐
+
+<span>Language</span>
+
+</div>
+
+<div class="setting-item">
+
+🌙
+
+<span>Dark Mode</span>
+
+</div>
+
+<div class="setting-item">
+
+🔔
+
+<span>Notifications</span>
+
+</div>
+
+<div class="setting-item">
+
+🤖
+
+<span>AI Preferences</span>
+
+</div>
+
+<div class="section-title">
+
+Support
+
+</div>
+
+<div class="setting-item">
+
+❤️
+
+<span>About Meditips</span>
+
+</div>
+
+<div class="setting-item">
+
+⭐
+
+<span>Rate App</span>
+
+</div>
+
+<div class="setting-item">
+
+📞
+
+<span>Contact Us</span>
+
+</div>
+
+<div class="setting-item">
+
+🔐
+
+<span>Privacy Policy</span>
 
 </div>
 
 </div>
+    
 
-<script
-type="module"
-src="../js/profile.js">
+    <button
+    id="logoutBtn"
+    class="logout-btn">
 
-</script>
+        🚪 Logout
 
-<script
-type="module"
-src="../js/logout.js">
+    </button>
 
-</script>
+</div>
 
-<script
-type="module"
-src="../js/protect.js">
+<script type="module"
+src="../js/profile.js"></script>
 
+<script type="module"
+src="../js/navbar.js"></script>
 
-</script>
-<script
-type="module"
-src="../js/navbar.js">
-</script>
 </body>
 
 </html>
