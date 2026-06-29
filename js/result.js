@@ -72,14 +72,56 @@ loadMedicine();
 
 // ❤️ Favorite
 
+import {
+    auth,
+    db
+} from "./firebase-config.js";
+
+import {
+    collection,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
 const favoriteBtn =
 document.getElementById("favoriteBtn");
 
-favoriteBtn?.addEventListener("click",()=>{
+favoriteBtn?.addEventListener("click",async()=>{
 
-    favoriteBtn.innerHTML="❤️";
+    try{
 
-    // Later we'll save to Firestore
+        await addDoc(
+
+            collection(db,"favorites"),
+
+            {
+
+                uid:
+                auth.currentUser.uid,
+
+                medicineName:
+                localStorage.getItem("medicineName"),
+
+                savedAt:
+                serverTimestamp()
+
+            }
+
+        );
+
+        favoriteBtn.innerHTML="❤️ Saved";
+
+        favoriteBtn.disabled=true;
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("Unable to save.");
+
+    }
 
 });
 

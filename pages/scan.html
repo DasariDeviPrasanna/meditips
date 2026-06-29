@@ -8,22 +8,101 @@
   <link rel="stylesheet" href="../css/navbar.css">
 </head>
 <body>
+<div class="scan-page">
 
-<div class="scan-container">
-  <h1>📷 Scan Medicine</h1>
-  <div class="upload-card">
-    <input type="file" id="medicineImage" accept="image/*">
-    <br><br>
-    <img id="previewImage" style="max-width:300px; display:none; border-radius:12px;">
-    <br><br>
-    <button id="scanBtn">Scan Medicine</button>
-  </div>
+    <h1>
+
+        📷 Scan Medicine
+
+    </h1>
+
+    <p class="scan-subtitle">
+
+        Identify medicines instantly using AI
+
+    </p>
+
+    <div class="preview-card">
+
+        <img
+        id="previewImage"
+        src="../assets/upload.png">
+
+        <p id="imageStatus">
+
+            No image selected
+
+        </p>
+
+    </div>
+
+    <input
+    type="file"
+    id="imageInput"
+    accept="image/*"
+    capture="environment"
+    hidden>
+
+    <button
+    class="primary-btn"
+    id="cameraBtn">
+
+        📷 Take Photo
+
+    </button>
+
+    <button
+    class="secondary-btn"
+    id="galleryBtn">
+
+        🖼 Upload From Gallery
+
+    </button>
+
+    <button
+    class="scan-btn"
+    id="scanBtn">
+
+        🔍 Scan Medicine
+
+    </button>
+
+    <div class="tips-card">
+
+        <h3>
+
+            💡 Tips
+
+        </h3>
+
+        <ul>
+
+            <li>Use good lighting.</li>
+
+            <li>Capture the full medicine strip.</li>
+
+            <li>Avoid blurry images.</li>
+
+        </ul>
+
+    </div>
+
 </div>
 
+<div
+id="loadingOverlay"
+class="loading-overlay">
+
+<div class="loader"></div>
+
+<h2 id="loadingText">
+
+Scanning Medicine...
+
+</h2>
+
+</div>
 <script type="module" src="../js/scan.js"></script>
-<script
-type="module"
-src="../js/navbar.js">
-</script>
+<script type="module" src="../js/navbar.js"></script>
 </body>
 </html>
