@@ -93,3 +93,30 @@ askAiBtn?.addEventListener("click",()=>{
     window.location.href="assistant.html";
 
 });
+const shareBtn =
+document.getElementById("shareBtn");
+
+shareBtn?.addEventListener("click",async()=>{
+
+const medicineName =
+localStorage.getItem("medicineName");
+
+if(navigator.share){
+
+await navigator.share({
+
+title:"Meditips",
+
+text:`Check this medicine: ${medicineName}`
+
+});
+
+}else{
+
+navigator.clipboard.writeText(medicineName);
+
+alert("Medicine name copied!");
+
+}
+
+});
