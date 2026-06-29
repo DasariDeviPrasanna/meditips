@@ -52,3 +52,60 @@
 .tip-card{
     margin-top:25px;
 }
+.scan-card{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 30px;
+}
+
+.scan-content h2{
+margin:0;
+font-size:32px;
+}
+
+.scan-content p{
+margin-top:8px;
+opacity:.9;
+}
+
+.scan-arrow{
+font-size:32px;
+}
+.activity{
+
+background:white;
+
+padding:18px;
+
+border-radius:15px;
+
+margin-bottom:12px;
+
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+.tip-card{
+
+background:#fff8e6;
+
+border-left:6px solid orange;
+
+padding:20px;
+
+border-radius:18px;
+
+}
+section{
+
+margin-top:35px;
+
+}
+.scan-card{
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #4f8cff,
+        #6aa7ff
+    );
+}
