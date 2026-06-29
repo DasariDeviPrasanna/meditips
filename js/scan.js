@@ -88,3 +88,32 @@ document.getElementById("scanBtn").addEventListener("click", async () => {
     alert("Scan Failed. Please try again.");
   }
 });
+const cameraBtn =
+document.getElementById("cameraBtn");
+
+const galleryBtn =
+document.getElementById("galleryBtn");
+
+const imageInput =
+document.getElementById("imageInput");
+
+cameraBtn.addEventListener("click",()=>{
+
+    imageInput.setAttribute(
+        "capture",
+        "environment"
+    );
+
+    imageInput.click();
+
+});
+
+galleryBtn.addEventListener("click",()=>{
+
+    imageInput.removeAttribute(
+        "capture"
+    );
+
+    imageInput.click();
+
+});

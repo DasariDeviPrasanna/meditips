@@ -1,108 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scan Medicine - Meditips</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/navbar.css">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Scan Medicine | Meditips</title>
+
+    <link rel="stylesheet"
+        href="../css/style.css">
+
+    <link rel="stylesheet"
+        href="../css/navbar.css">
+
 </head>
+
 <body>
+
 <div class="scan-page">
 
-    <h1>
+    <!-- Header -->
 
-        📷 Scan Medicine
+    <div class="page-header">
 
-    </h1>
+        <h1>📷 Scan Medicine</h1>
 
-    <p class="scan-subtitle">
-
-        Identify medicines instantly using AI
-
-    </p>
-
-    <div class="preview-card">
-
-        <img
-        id="previewImage"
-        src="../assets/upload.png">
-
-        <p id="imageStatus">
-
-            No image selected
-
+        <p>
+            Capture or upload a medicine strip and let AI identify it instantly.
         </p>
 
     </div>
 
+    <!-- Preview -->
+
+    <div class="preview-card">
+
+        <img
+            id="previewImage"
+            src="../assets/upload.png"
+            alt="Preview">
+
+        <div class="preview-status">
+
+            <span id="statusIcon">
+                📷
+            </span>
+
+            <p id="imageStatus">
+                No image selected
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Hidden File Input -->
+
     <input
-    type="file"
-    id="imageInput"
-    accept="image/*"
-    capture="environment"
-    hidden>
+        type="file"
+        id="imageInput"
+        accept="image/*"
+        capture="environment"
+        hidden>
+
+    <!-- Camera & Gallery -->
+
+    <div class="action-grid">
+
+        <button
+            class="action-card"
+            id="cameraBtn"
+            type="button">
+
+            <div class="action-icon">
+                📷
+            </div>
+
+            <h3>Camera</h3>
+
+            <p>Take a new photo</p>
+
+        </button>
+
+        <button
+            class="action-card"
+            id="galleryBtn"
+            type="button">
+
+            <div class="action-icon">
+                🖼
+            </div>
+
+            <h3>Gallery</h3>
+
+            <p>Select from gallery</p>
+
+        </button>
+
+    </div>
+
+    <!-- Scan -->
 
     <button
-    class="primary-btn"
-    id="cameraBtn">
-
-        📷 Take Photo
-
-    </button>
-
-    <button
-    class="secondary-btn"
-    id="galleryBtn">
-
-        🖼 Upload From Gallery
-
-    </button>
-
-    <button
-    class="scan-btn"
-    id="scanBtn">
+        id="scanBtn"
+        class="scan-btn">
 
         🔍 Scan Medicine
 
     </button>
 
+    <!-- Tips -->
+
     <div class="tips-card">
 
         <h3>
 
-            💡 Tips
+            💡 AI Scan Tips
 
         </h3>
 
-        <ul>
+        <div class="tip">
 
-            <li>Use good lighting.</li>
+            💡 Use good lighting.
 
-            <li>Capture the full medicine strip.</li>
+        </div>
 
-            <li>Avoid blurry images.</li>
+        <div class="tip">
 
-        </ul>
+            📦 Capture the complete medicine strip.
+
+        </div>
+
+        <div class="tip">
+
+            📸 Avoid blurry or tilted images.
+
+        </div>
 
     </div>
 
 </div>
 
+<!-- Loading -->
+
 <div
-id="loadingOverlay"
-class="loading-overlay">
+    id="loadingOverlay"
+    class="loading-overlay">
 
-<div class="loader"></div>
+    <div class="loader"></div>
 
-<h2 id="loadingText">
+    <h2 id="loadingText">
 
-Scanning Medicine...
+        Detecting Medicine...
 
-</h2>
+    </h2>
 
 </div>
-<script type="module" src="../js/scan.js"></script>
-<script type="module" src="../js/navbar.js"></script>
+
+<script
+    type="module"
+    src="../js/scan.js"></script>
+
+<script
+    type="module"
+    src="../js/navbar.js"></script>
+
 </body>
+
 </html>
