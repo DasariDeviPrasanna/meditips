@@ -1,38 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Medicine Result - Meditips</title>
-  <link rel="stylesheet" href="../css/result.css">
-  <link rel="stylesheet" href="../css/navbar.css">
-  <link rel="stylesheet" href="../css/common.css">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Medicine Result | Meditips</title>
+
+    <link rel="stylesheet"
+        href="../css/common.css">
+
+    <link rel="stylesheet"
+        href="../css/result.css">
+
+    <link rel="stylesheet"
+        href="../css/navbar.css">
+
 </head>
+
 <body>
 
 <div class="result-container">
-<div class="medicine-header">
 
-    <div>
-<div class="medicine-banner">
+    <!-- Medicine Banner -->
 
-    <div class="medicine-icon">
+    <div class="result-banner">
 
-        💊
+        <div class="banner-icon">
+
+            💊
+
+        </div>
+
+        <div class="banner-text">
+
+            <h1 id="medicineName">
+
+                Loading...
+
+            </h1>
+
+            <p>
+
+                AI Medicine Analysis
+
+            </p>
+
+        </div>
 
     </div>
 
-    <div>
+    <!-- Action Buttons -->
 
-        <h1 id="medicineName">
+    <div class="result-actions">
+
+        <button id="favoriteBtn">
+
+            ❤️ Favorite
+
+        </button>
+
+        <button id="shareBtn">
+
+            📤 Share
+
+        </button>
+
+        <button id="askAiBtn">
+
+            🤖 Ask AI
+
+        </button>
+
+    </div>
+
+    <!-- Uses -->
+
+    <div class="info-card">
+
+        <h3>
+
+            🩺 Uses
+
+        </h3>
+
+        <p id="uses">
 
             Loading...
 
-        </h1>
+        </p>
 
-        <p>
+    </div>
 
-            AI Medicine Analysis
+    <!-- Telugu -->
+
+    <div class="info-card">
+
+        <h3>
+
+            🌐 Telugu Explanation
+
+        </h3>
+
+        <p id="telugu">
+
+            Loading...
+
+        </p>
+
+    </div>
+
+    <!-- Side Effects -->
+
+    <div class="info-card side-effects">
+
+        <h3>
+
+            ⚠ Side Effects
+
+        </h3>
+
+        <p id="sideEffects">
+
+            Loading...
+
+        </p>
+
+    </div>
+
+    <!-- Diet -->
+
+    <div class="info-card diet">
+
+        <h3>
+
+            🥗 Diet Recommendation
+
+        </h3>
+
+        <p id="diet">
+
+            Loading...
+
+        </p>
+
+    </div>
+
+    <!-- Dosage -->
+
+    <div class="info-card dosage">
+
+        <h3>
+
+            💊 Dosage
+
+        </h3>
+
+        <p id="dosage">
+
+            Loading...
+
+        </p>
+
+    </div>
+
+    <!-- Warnings -->
+
+    <div class="info-card warning">
+
+        <h3>
+
+            🚨 Warnings
+
+        </h3>
+
+        <p id="warnings">
+
+            Loading...
 
         </p>
 
@@ -40,79 +187,14 @@
 
 </div>
 
-        <p class="medicine-subtitle">
-
-            AI Medicine Analysis
-
-        </p>
-
-    </div>
-
-    <button id="favoriteBtn">
-
-        ❤️
-
-    </button>
-
-</div>
-<div class="info-card">
-
-    <h3>🩺 Uses</h3>
-
-    <p id="uses"></p>
-
-</div>
-
-<div class="info-card">
-
-    <h3>🌐 Telugu Explanation</h3>
-
-    <p id="telugu"></p>
-
-</div>
-
-<div class="info-card">
-
-    <h3>⚠️ Side Effects</h3>
-
-    <p id="sideEffects"></p>
-
-</div>
-
-<div class="info-card">
-
-    <h3>🥗 Diet Recommendation</h3>
-
-    <p id="diet"></p>
-
-</div>
-
-<div class="info-card">
-
-    <h3>⏰ Dosage</h3>
-
-    <p id="dosage"></p>
-
-</div>
-
-<div class="info-card">
-
-    <h3>🚫 Warnings</h3>
-
-    <p id="warnings"></p>
-
-</div>
-<div class="result-actions">
-    <button id="favoriteBtn">❤️ Favorite</button>
-    <button id="shareBtn">📤 Share</button>
-    <button id="askAiBtn">🤖 Ask AI</button>
-</div>
-  
-
-<script type="module" src="../js/result.js"></script>
 <script
 type="module"
-src="../js/navbar.js">
-</script>
+src="../js/result.js"></script>
+
+<script
+type="module"
+src="../js/navbar.js"></script>
+
 </body>
+
 </html>
