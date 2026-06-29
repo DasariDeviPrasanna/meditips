@@ -1,44 +1,262 @@
+
+body{
+    background:#f4f7fb;
+}
+
 .result-container{
-    max-width:800px;
+
+    max-width:850px;
+
     margin:auto;
+
     padding:20px;
-    padding-bottom:100px;
+
+    padding-bottom:110px;
+
 }
 
-.medicine-banner{
-    display:flex;
-    gap:20px;
-    align-items:center;
+/* Banner */
+
+.result-banner{
+
     background:linear-gradient(135deg,#2563eb,#4f8cff);
+
     color:white;
+
+    border-radius:24px;
+
     padding:25px;
-    border-radius:20px;
-}
 
-.medicine-icon{
-    width:70px;
-    height:70px;
-    border-radius:18px;
-    background:white;
-    color:#2563eb;
     display:flex;
+
     align-items:center;
-    justify-content:center;
-    font-size:35px;
+
+    gap:20px;
+
+    box-shadow:0 12px 25px rgba(37,99,235,.25);
+
+    margin-bottom:25px;
+
 }
 
-.info-card{
-    margin-top:18px;
+.banner-icon{
+
+    width:80px;
+
+    height:80px;
+
+    background:white;
+
+    color:#2563eb;
+
+    border-radius:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:42px;
+
+    flex-shrink:0;
+
 }
+
+.banner-text h1{
+
+    font-size:34px;
+
+    margin-bottom:8px;
+
+}
+
+.banner-text p{
+
+    opacity:.95;
+
+    font-size:18px;
+
+}
+
+/* Action Buttons */
 
 .result-actions{
-    display:flex;
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
     gap:15px;
-    margin-top:25px;
+
+    margin-bottom:25px;
+
 }
 
 .result-actions button{
-    flex:1;
+
     padding:15px;
+
+    border:none;
+
     border-radius:15px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#favoriteBtn{
+
+    background:#ff4d6d;
+
+    color:white;
+
+}
+
+#shareBtn{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+#askAiBtn{
+
+    background:#10b981;
+
+    color:white;
+
+}
+
+.result-actions button:hover{
+
+    transform:translateY(-3px);
+
+}
+
+/* Information Cards */
+
+.info-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:22px;
+
+    margin-bottom:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.info-card h3{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    color:#2563eb;
+
+    font-size:24px;
+
+    margin-bottom:15px;
+
+}
+
+.info-card p{
+
+    color:#444;
+
+    font-size:17px;
+
+    line-height:1.8;
+
+    white-space:pre-line;
+
+}
+
+/* Special Cards */
+
+.side-effects{
+
+    border-left:6px solid #f59e0b;
+
+}
+
+.diet{
+
+    border-left:6px solid #22c55e;
+
+}
+
+.dosage{
+
+    border-left:6px solid #3b82f6;
+
+}
+
+.warning{
+
+    border-left:6px solid #ef4444;
+
+}
+
+/* Loading */
+
+.loading{
+
+    text-align:center;
+
+    padding:50px;
+
+    color:#777;
+
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.result-banner{
+
+flex-direction:column;
+
+text-align:center;
+
+}
+
+.banner-text h1{
+
+font-size:28px;
+
+}
+
+.result-actions{
+
+grid-template-columns:1fr;
+
+}
+
+.info-card h3{
+
+font-size:21px;
+
+}
+
+.info-card p{
+
+font-size:16px;
+
+}
+
 }
