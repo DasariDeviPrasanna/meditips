@@ -1,0 +1,62 @@
+.scan-page{
+    padding:25px;
+    padding-bottom:100px;
+}
+
+.page-header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.preview-card{
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.preview-card img{
+    width:180px;
+    height:180px;
+    object-fit:contain;
+}
+
+.action-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin:25px 0;
+}
+
+.action-card{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.action-icon{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.scan-btn{
+    width:100%;
+    padding:18px;
+    background:#10b981;
+    color:white;
+    border-radius:18px;
+    font-size:18px;
+}
+
+.tips-card{
+    margin-top:20px;
+}
+
+.tip{
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    margin-top:10px;
+}

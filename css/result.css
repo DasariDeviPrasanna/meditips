@@ -1,0 +1,44 @@
+.result-container{
+    max-width:800px;
+    margin:auto;
+    padding:20px;
+    padding-bottom:100px;
+}
+
+.medicine-banner{
+    display:flex;
+    gap:20px;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#4f8cff);
+    color:white;
+    padding:25px;
+    border-radius:20px;
+}
+
+.medicine-icon{
+    width:70px;
+    height:70px;
+    border-radius:18px;
+    background:white;
+    color:#2563eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:35px;
+}
+
+.info-card{
+    margin-top:18px;
+}
+
+.result-actions{
+    display:flex;
+    gap:15px;
+    margin-top:25px;
+}
+
+.result-actions button{
+    flex:1;
+    padding:15px;
+    border-radius:15px;
+}

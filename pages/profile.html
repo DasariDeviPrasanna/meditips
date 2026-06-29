@@ -8,13 +8,14 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Profile</title>
+<title>Profile | Meditips</title>
 
 <link rel="stylesheet"
-href="../css/style.css">
+href="../css/profile.css">
 
 <link rel="stylesheet"
 href="../css/navbar.css">
+<link rel="stylesheet" href="../css/common.css">
 
 </head>
 
@@ -27,7 +28,8 @@ href="../css/navbar.css">
         <img
         id="profilePhoto"
         class="profile-image"
-        src="https://ui-avatars.com/api/?name=User">
+        src="https://ui-avatars.com/api/?name=User"
+        alt="Profile">
 
         <h2 id="profileName">
 
@@ -47,131 +49,114 @@ href="../css/navbar.css">
 
         <div class="profile-stat">
 
-            <h2 id="totalScans">
+            <h2 id="totalScans">0</h2>
 
-                0
-
-            </h2>
-
-            <p>
-
-                Total Scans
-
-            </p>
+            <p>Total Scans</p>
 
         </div>
 
         <div class="profile-stat">
 
-            <h2 id="totalChats">
+            <h2 id="totalChats">0</h2>
 
-                0
-
-            </h2>
-
-            <p>
-
-                AI Chats
-
-            </p>
+            <p>AI Chats</p>
 
         </div>
 
     </div>
-<div class="settings">
 
-<div class="section-title">
+    <div class="settings-card">
 
-Health
+        <h3>Health</h3>
 
-</div>
+        <div class="setting-item">
 
-<div class="setting-item">
+            <span>✏️ Edit Profile</span>
 
-✏️
+            <span>›</span>
 
-<span>Edit Profile</span>
+        </div>
 
-</div>
+        <div class="setting-item">
 
-<div class="setting-item">
+            <span>🌐 Language</span>
 
-🌐
+            <span>›</span>
 
-<span>Language</span>
+        </div>
 
-</div>
-<div class="setting-item"
-onclick="location.href='favorites.html'">
+        <div class="setting-item"
+        onclick="window.location.href='favorites.html'">
 
-❤️ Favorites
+            <span>❤️ Favorites</span>
 
-</div>
+            <span>›</span>
 
-<div class="setting-item">
+        </div>
 
-🌙
+        <div class="setting-item">
 
-<span>Dark Mode</span>
+            <span>🌙 Dark Mode</span>
 
-</div>
+            <span>›</span>
 
-<div class="setting-item">
+        </div>
 
-🔔
+        <div class="setting-item">
 
-<span>Notifications</span>
+            <span>🔔 Notifications</span>
 
-</div>
+            <span>›</span>
 
-<div class="setting-item">
+        </div>
 
-🤖
+        <div class="setting-item">
 
-<span>AI Preferences</span>
+            <span>🤖 AI Preferences</span>
 
-</div>
+            <span>›</span>
 
-<div class="section-title">
+        </div>
 
-Support
+    </div>
 
-</div>
+    <div class="settings-card">
 
-<div class="setting-item">
+        <h3>Support</h3>
 
-❤️
+        <div class="setting-item">
 
-<span>About Meditips</span>
+            <span>❤️ About Meditips</span>
 
-</div>
+            <span>›</span>
 
-<div class="setting-item">
+        </div>
 
-⭐
+        <div class="setting-item">
 
-<span>Rate App</span>
+            <span>⭐ Rate App</span>
 
-</div>
+            <span>›</span>
 
-<div class="setting-item">
+        </div>
 
-📞
+        <div class="setting-item">
 
-<span>Contact Us</span>
+            <span>📞 Contact Us</span>
 
-</div>
+            <span>›</span>
 
-<div class="setting-item">
+        </div>
 
-🔐
+        <div class="setting-item">
 
-<span>Privacy Policy</span>
+            <span>🔒 Privacy Policy</span>
 
-</div>
+            <span>›</span>
 
-</div>
-    
+        </div>
+
+    </div>
 
     <button
     id="logoutBtn"
@@ -183,10 +168,12 @@ Support
 
 </div>
 
-<script type="module"
+<script
+type="module"
 src="../js/profile.js"></script>
 
-<script type="module"
+<script
+type="module"
 src="../js/navbar.js"></script>
 
 </body>
