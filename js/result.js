@@ -1,3 +1,10 @@
+import { auth, db } from "./firebase-config.js";
+
+import {
+    addDoc,
+    collection,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 async function loadMedicine() {
 
     const medicineName =
@@ -86,44 +93,51 @@ import {
 const favoriteBtn =
 document.getElementById("favoriteBtn");
 
-favoriteBtn?.addEventListener("click",async()=>{
 
-    try{
+favoriteBtn?.addEventListener("click", async () => {
+
+    if (!auth.currentUser) {
+
+        alert("Please login first.");
+
+        return;
+
+    }
+
+    try {
 
         await addDoc(
 
-            collection(db,"favorites"),
+            collection(db, "favorites"),
 
             {
 
-                uid:
-                auth.currentUser.uid,
+                uid: auth.currentUser.uid,
 
-                medicineName:
-                localStorage.getItem("medicineName"),
+                medicineName: localStorage.getItem("medicineName"),
 
-                savedAt:
-                serverTimestamp()
+                savedAt: serverTimestamp()
 
             }
 
         );
 
-        favoriteBtn.innerHTML="❤️ Saved";
+        favoriteBtn.innerHTML = "❤️ Saved";
 
-        favoriteBtn.disabled=true;
+        favoriteBtn.disabled = true;
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(error);
 
-        alert("Unable to save.");
+        alert("Unable to save favorite.");
 
     }
 
 });
+
 
 // 🤖 AI
 
