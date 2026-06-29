@@ -172,7 +172,21 @@ onAuthStateChanged(auth, async (user) => {
 
         // Health Tips
 
-        const tips = [
+        
+    }
+
+    catch (error) {
+
+        console.error(
+            "Dashboard Error:",
+            error
+        );
+
+    }
+
+});
+
+const tips = [
 
             "💧 Drink at least 8 glasses of water today.",
 
@@ -203,16 +217,3 @@ onAuthStateChanged(auth, async (user) => {
                 ];
 
         }
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Dashboard Error:",
-            error
-        );
-
-    }
-
-});
