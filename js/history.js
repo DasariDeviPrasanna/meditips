@@ -27,13 +27,20 @@ document.getElementById("mostMedicine");
 const lastScan =
 document.getElementById("lastScan");
 
+const filterButtons =
+document.querySelectorAll(".filter-btn");
+
+let currentFilter = "all";
+
+// ==============================
+// Load History
+// ==============================
+
 async function loadHistory(user){
 
-    // ==========================
-    // Scan History
-    // ==========================
+    historyList.innerHTML="";
 
-    const historyQuery = query(
+    const historyQuery=query(
 
         collection(db,"history"),
 
@@ -43,15 +50,18 @@ async function loadHistory(user){
 
     );
 
-    const historySnap =
+    const historySnap=
     await getDocs(historyQuery);
 
-    historyList.innerHTML="";
-
-    totalScans.textContent =
+    totalScans.textContent=
     historySnap.size;
 
-    const counts = {};
+    const counts={};
+
+    const today=
+    new Date();
+
+    // ---------- Empty ----------
 
     if(historySnap.empty){
 
@@ -69,7 +79,7 @@ async function loadHistory(user){
 
             <p>
 
-                Scan your first medicine to view history.
+                Scan your first medicine.
 
             </p>
 
@@ -83,74 +93,102 @@ async function loadHistory(user){
 
     }
 
-    else{
+    // ---------- Cards ----------
 
-        historySnap.forEach(doc=>{
+    historySnap.forEach(doc=>{
 
-            const data=
-            doc.data();
+        const data=
+        doc.data();
 
-            const date=
-            data.scannedAt?.toDate();
+        const date=
+        data.scannedAt?.toDate();
 
-            const time=
-            date
-            ? date.toLocaleString()
-            : "Recently";
+        let show=true;
 
-            counts[data.medicineName]=
-            (counts[data.medicineName]||0)+1;
+        if(currentFilter==="today"){
 
-            historyList.innerHTML+=`
-
-            <div
-            class="history-card"
-            data-name="${data.medicineName}">
-
-                <h3>
-
-                    💊 ${data.medicineName}
-
-                </h3>
-
-                <p>
-
-                    🕒 ${time}
-
-                </p>
-
-            </div>
-
-            `;
-
-        });
-
-        // ==========================
-        // Most Scanned
-        // ==========================
-
-        let highest=0;
-
-        let medicine="-";
-
-        for(const key in counts){
-
-            if(counts[key]>highest){
-
-                highest=counts[key];
-
-                medicine=key;
-
-            }
+            show=
+            date &&
+            date.toDateString()===
+            today.toDateString();
 
         }
 
-        mostMedicine.textContent=
-        medicine;
+        else if(currentFilter==="week"){
 
-        // ==========================
-        // Last Scan
-        // ==========================
+            const diff=
+
+            (today-date)/(1000*60*60*24);
+
+            show=
+            diff<=7;
+
+        }
+
+        if(!show){
+
+            return;
+
+        }
+
+        counts[data.medicineName]=
+        (counts[data.medicineName]||0)+1;
+
+        const time=
+        date
+        ? date.toLocaleString()
+        : "Recently";
+
+        historyList.innerHTML+=`
+
+        <div
+        class="history-card"
+        data-name="${data.medicineName}">
+
+            <h3>
+
+                💊 ${data.medicineName}
+
+            </h3>
+
+            <p>
+
+                🕒 ${time}
+
+            </p>
+
+        </div>
+
+        `;
+
+    });
+
+    // ---------- Most Scanned ----------
+
+    let highest=0;
+
+    let medicine="-";
+
+    for(const key in counts){
+
+        if(counts[key]>highest){
+
+            highest=
+            counts[key];
+
+            medicine=
+            key;
+
+        }
+
+    }
+
+    mostMedicine.textContent=
+    medicine;
+
+    // ---------- Last Scan ----------
+
+    if(historySnap.docs.length){
 
         const latest=
         historySnap.docs[0].data();
@@ -160,47 +198,43 @@ async function loadHistory(user){
 
         lastScan.textContent=
         latestDate
-        ? latestDate.toLocaleDateString()
+        ? latestDate.toLocaleString()
         : "-";
-
-        // ==========================
-        // Open Result Page
-        // ==========================
-
-        document
-        .querySelectorAll(".history-card")
-        .forEach(card=>{
-
-            card.onclick=()=>{
-
-                localStorage.setItem(
-
-                    "medicineName",
-
-                    card.dataset.name
-
-                );
-
-                localStorage.setItem(
-
-                    "medicineId",
-
-                    "unknown"
-
-                );
-
-                window.location.href=
-                "result.html";
-
-            };
-
-        });
 
     }
 
-    // ==========================
-    // AI Chats
-    // ==========================
+    // ---------- Click Card ----------
+
+    document
+    .querySelectorAll(".history-card")
+    .forEach(card=>{
+
+        card.onclick=()=>{
+
+            localStorage.setItem(
+
+                "medicineName",
+
+                card.dataset.name
+
+            );
+
+            localStorage.setItem(
+
+                "medicineId",
+
+                "unknown"
+
+            );
+
+            window.location.href=
+            "result.html";
+
+        };
+
+    });
+
+    // ---------- AI Chats ----------
 
     const chatQuery=query(
 
@@ -218,7 +252,11 @@ async function loadHistory(user){
 
 }
 
-onAuthStateChanged(auth,(user)=>{
+// ==============================
+// Auth
+// ==============================
+
+onAuthStateChanged(auth,user=>{
 
     if(user){
 
@@ -232,5 +270,34 @@ onAuthStateChanged(auth,(user)=>{
         "login.html";
 
     }
+
+});
+
+// ==============================
+// Filters
+// ==============================
+
+filterButtons.forEach(btn=>{
+
+    btn.onclick=()=>{
+
+        filterButtons.forEach(button=>{
+
+            button.classList.remove("active");
+
+        });
+
+        btn.classList.add("active");
+
+        currentFilter=
+        btn.dataset.filter;
+
+        if(auth.currentUser){
+
+            loadHistory(auth.currentUser);
+
+        }
+
+    };
 
 });
