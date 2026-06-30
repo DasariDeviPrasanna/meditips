@@ -29,7 +29,9 @@ document.getElementById("lastScan");
 
 async function loadHistory(user){
 
-    // ---------------- History ----------------
+    // ==========================
+    // Scan History
+    // ==========================
 
     const historyQuery = query(
 
@@ -51,57 +53,9 @@ async function loadHistory(user){
 
     const counts = {};
 
-    let latestMedicine = "-";
-
-    historySnap.forEach((doc,index)=>{
-
-        const data = doc.data();
-
-        const date =
-        data.scannedAt?.toDate();
-
-        const time =
-        date
-        ? date.toLocaleString()
-        : "Recently";
-
-        historyList.innerHTML += `
-
-        <div class="history-card">
-
-            <h3>
-
-                💊 ${data.medicineName}
-
-            </h3>
-
-            <p>
-
-                ${time}
-
-            </p>
-
-        </div>
-
-        `;
-
-        counts[data.medicineName] =
-        (counts[data.medicineName] || 0) + 1;
-
-        if(index===0){
-
-            latestMedicine =
-            data.medicineName;
-
-        }
-
-    });
-
-    // Empty History
-
     if(historySnap.empty){
 
-        historyList.innerHTML = `
+        historyList.innerHTML=`
 
         <div class="empty-history">
 
@@ -115,7 +69,7 @@ async function loadHistory(user){
 
             <p>
 
-                Scan your first medicine to see history.
+                Scan your first medicine to view history.
 
             </p>
 
@@ -123,48 +77,132 @@ async function loadHistory(user){
 
         `;
 
+        mostMedicine.textContent="-";
+
+        lastScan.textContent="-";
+
     }
 
-    // Most Scanned Medicine
+    else{
 
-    let highest = 0;
+        historySnap.forEach(doc=>{
 
-    let medicine = "-";
+            const data=
+            doc.data();
 
-    for(const key in counts){
+            const date=
+            data.scannedAt?.toDate();
 
-        if(counts[key] > highest){
+            const time=
+            date
+            ? date.toLocaleString()
+            : "Recently";
 
-            highest = counts[key];
+            counts[data.medicineName]=
+            (counts[data.medicineName]||0)+1;
 
-            medicine = key;
+            historyList.innerHTML+=`
+
+            <div
+            class="history-card"
+            data-name="${data.medicineName}">
+
+                <h3>
+
+                    💊 ${data.medicineName}
+
+                </h3>
+
+                <p>
+
+                    🕒 ${time}
+
+                </p>
+
+            </div>
+
+            `;
+
+        });
+
+        // ==========================
+        // Most Scanned
+        // ==========================
+
+        let highest=0;
+
+        let medicine="-";
+
+        for(const key in counts){
+
+            if(counts[key]>highest){
+
+                highest=counts[key];
+
+                medicine=key;
+
+            }
 
         }
 
+        mostMedicine.textContent=
+        medicine;
+
+        // ==========================
+        // Last Scan
+        // ==========================
+
+        const latest=
+        historySnap.docs[0].data();
+
+        const latestDate=
+        latest.scannedAt?.toDate();
+
+        lastScan.textContent=
+        latestDate
+        ? latestDate.toLocaleDateString()
+        : "-";
+
+        // ==========================
+        // Open Result Page
+        // ==========================
+
+        document
+        .querySelectorAll(".history-card")
+        .forEach(card=>{
+
+            card.onclick=()=>{
+
+                localStorage.setItem(
+
+                    "medicineName",
+
+                    card.dataset.name
+
+                );
+
+                localStorage.setItem(
+
+                    "medicineId",
+
+                    "unknown"
+
+                );
+
+                window.location.href=
+                "result.html";
+
+            };
+
+        });
+
     }
 
-    mostMedicine.textContent =
-    medicine;
+    // ==========================
+    // AI Chats
+    // ==========================
 
-    const latestDoc = historySnap.docs[0];
-
-if(latestDoc){
-
-    const latestData = latestDoc.data();
-
-    const latestDate =
-    latestData.scannedAt?.toDate();
-
-    lastScan.textContent =
-    latestDate
-    ? latestDate.toLocaleDateString()
-    : "-";
-
-}
-
-    // ---------------- AI Chats ----------------
-
-    const chatQuery = query(
+    const chatQuery=query(
 
         collection(db,"chatHistory"),
 
@@ -172,10 +210,10 @@ if(latestDoc){
 
     );
 
-    const chatSnap =
+    const chatSnap=
     await getDocs(chatQuery);
 
-    totalChats.textContent =
+    totalChats.textContent=
     chatSnap.size;
 
 }
@@ -190,7 +228,7 @@ onAuthStateChanged(auth,(user)=>{
 
     else{
 
-        window.location.href =
+        window.location.href=
         "login.html";
 
     }
