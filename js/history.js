@@ -146,8 +146,21 @@ async function loadHistory(user){
     mostMedicine.textContent =
     medicine;
 
+    const latestDoc = historySnap.docs[0];
+
+if(latestDoc){
+
+    const latestData = latestDoc.data();
+
+    const latestDate =
+    latestData.scannedAt?.toDate();
+
     lastScan.textContent =
-    latestMedicine;
+    latestDate
+    ? latestDate.toLocaleDateString()
+    : "-";
+
+}
 
     // ---------------- AI Chats ----------------
 

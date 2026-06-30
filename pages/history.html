@@ -1,127 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<title>
+<meta charset="UTF-8">
 
-History
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-</title>
+<title>History | Meditips</title>
+
+<link rel="stylesheet"
+href="../css/common.css">
 
 <link rel="stylesheet"
 href="../css/history.css">
+
 <link rel="stylesheet"
 href="../css/navbar.css">
-<link rel="stylesheet" href="../css/common.css">
 
 </head>
 
 <body>
-<div class="history-header">
 
-    <h1>📜 History</h1>
+<div class="history-page">
 
-    <p>
-        View your medicine scan history and insights.
-    </p>
+    <!-- Header -->
 
-</div>
-<h2 class="recent-title">
+    <div class="history-header">
 
-🕒 Recent Activity
+        <h1>
 
-</h2>
+            📜 History
 
-<div id="historyList"></div>
-<div class="analytics-section">
-<h2>📊 Analytics</h2>
-<div class="analytics-grid">
+        </h1>
 
-<div class="analytics-card">
+        <p>
 
-<h3 id="totalScans">
+            View your medicine scan history and analytics.
 
-0
+        </p>
 
-</h3>
+    </div>
 
-<p>
+    <!-- Analytics -->
 
-📷 Total Scans
+    <div class="analytics-section">
 
-</p>
+        <h2>
 
-</div>
+            📊 Analytics
 
-<div class="analytics-card">
+        </h2>
 
-<h3 id="totalChats">
+        <div class="analytics-grid">
 
-0
+            <div class="analytics-card">
 
-</h3>
+                <h3 id="totalScans">
 
-<p>
+                    0
 
-🤖 AI Chats
+                </h3>
 
-</p>
+                <p>
 
-</div>
+                    📷 Total Scans
 
-<div class="analytics-card">
+                </p>
 
-<h3 id="mostMedicine">
+            </div>
 
--
+            <div class="analytics-card">
 
-</h3>
+                <h3 id="totalChats">
 
-<p>
+                    0
 
-💊 Most Scanned
+                </h3>
 
-</p>
+                <p>
 
-</div>
+                    🤖 AI Chats
 
-<div class="analytics-card">
+                </p>
 
-<h3 id="lastScan">
+            </div>
 
--
+            <div class="analytics-card">
 
-</h3>
+                <h3 id="mostMedicine">
 
-<p>
+                    -
 
-📅 Last Scan
+                </h3>
 
-</p>
+                <p>
 
-</div>
+                    💊 Most Scanned
 
-</div>
+                </p>
 
-</div>
+            </div>
+
+            <div class="analytics-card">
+
+                <h3 id="lastScan">
+
+                    -
+
+                </h3>
+
+                <p>
+
+                    📅 Last Scan
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Recent Activity -->
+
+    <h2 class="recent-title">
+
+        🕒 Recent Activity
+
+    </h2>
+
+    <div id="historyList">
+
+    </div>
 
 </div>
 
 <script
 type="module"
-src="../js/history.js">
-
-</script>
+src="../js/history.js"></script>
 
 <script
 type="module"
-src="../js/protect.js">
-</script>
+src="../js/protect.js"></script>
+
 <script
 type="module"
-src="../js/navbar.js">
-</script>
+src="../js/navbar.js"></script>
+
 </body>
 
 </html>
