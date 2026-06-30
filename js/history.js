@@ -85,3 +85,14 @@ loadHistory();
 }
 
 });
+const counts = {};
+
+snapshot.forEach(doc=>{
+
+const name =
+doc.data().medicineName;
+
+counts[name] =
+(counts[name]||0)+1;
+
+});
