@@ -80,9 +80,18 @@ function addUserMessage(text) {
 
             <div class="bubble">
 
-                ${text}
+${text}
 
-            </div>
+<br><br>
+
+<button
+class="speakBtn">
+
+🔊 Listen
+
+</button>
+
+</div>
 
             <div class="avatar">
 
@@ -188,6 +197,24 @@ async function sendMessage() {
         }
 
         addAIMessage(data.reply);
+        setTimeout(()=>{
+
+const buttons =
+
+document.querySelectorAll(".speakBtn");
+
+const btn =
+
+buttons[buttons.length-1];
+
+btn.onclick=()=>{
+
+speakReply(data.reply);
+
+};
+
+},50);
+        speakReply(data.reply);
         if (auth.currentUser) {
 
     await addDoc(
@@ -299,5 +326,32 @@ if(micBtn){
 micBtn.style.display="none";
 
 }
+
+}
+function speakReply(text){
+
+if(!("speechSynthesis" in window)){
+
+return;
+
+}
+
+const speech =
+
+new SpeechSynthesisUtterance();
+
+speech.text = text;
+
+speech.lang = "en-IN";
+
+speech.rate = 1;
+
+speech.pitch = 1;
+
+speech.volume = 1;
+
+window.speechSynthesis.cancel();
+
+window.speechSynthesis.speak(speech);
 
 }
