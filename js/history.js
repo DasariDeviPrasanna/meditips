@@ -1,98 +1,185 @@
-import {
-  db,
-  auth
-}
-from "./firebase-config.js";
+import { db, auth } from "./firebase-config.js";
 
 import {
-  collection,
-  query,
-  where,
-  orderBy,
-  getDocs
-}
-from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    collection,
+    query,
+    where,
+    orderBy,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 const historyList =
-document.getElementById(
-  "historyList"
-);
+document.getElementById("historyList");
 
-async function loadHistory(){
+const totalScans =
+document.getElementById("totalScans");
 
-const q =
-query(
+const totalChats =
+document.getElementById("totalChats");
 
-collection(
-db,
-"history"
-),
+const mostMedicine =
+document.getElementById("mostMedicine");
 
-where(
-"uid",
-"==",
-auth.currentUser.uid
-),
+const lastScan =
+document.getElementById("lastScan");
 
-orderBy(
-"scannedAt",
-"desc"
-)
+async function loadHistory(user){
 
-);
+    // ---------------- History ----------------
 
-const snap =
-await getDocs(q);
+    const historyQuery = query(
 
-historyList.innerHTML="";
+        collection(db,"history"),
 
-snap.forEach(doc=>{
+        where("uid","==",user.uid),
 
-const data =
-doc.data();
+        orderBy("scannedAt","desc")
 
-historyList.innerHTML +=
+    );
 
-`
-<div class="history-card">
+    const historySnap =
+    await getDocs(historyQuery);
 
-<h3>
+    historyList.innerHTML="";
 
-💊 ${data.medicineName}
+    totalScans.textContent =
+    historySnap.size;
 
-</h3>
+    const counts = {};
 
-<p>
+    let latestMedicine = "-";
 
-${data.scannedAt?.toDate().toLocaleString()}
+    historySnap.forEach((doc,index)=>{
 
-</p>
+        const data = doc.data();
 
-</div>
+        const date =
+        data.scannedAt?.toDate();
 
-`;
+        const time =
+        date
+        ? date.toLocaleString()
+        : "Recently";
 
-});
+        historyList.innerHTML += `
+
+        <div class="history-card">
+
+            <h3>
+
+                💊 ${data.medicineName}
+
+            </h3>
+
+            <p>
+
+                ${time}
+
+            </p>
+
+        </div>
+
+        `;
+
+        counts[data.medicineName] =
+        (counts[data.medicineName] || 0) + 1;
+
+        if(index===0){
+
+            latestMedicine =
+            data.medicineName;
+
+        }
+
+    });
+
+    // Empty History
+
+    if(historySnap.empty){
+
+        historyList.innerHTML = `
+
+        <div class="empty-history">
+
+            <h1>📭</h1>
+
+            <h3>
+
+                No Scan History
+
+            </h3>
+
+            <p>
+
+                Scan your first medicine to see history.
+
+            </p>
+
+        </div>
+
+        `;
+
+    }
+
+    // Most Scanned Medicine
+
+    let highest = 0;
+
+    let medicine = "-";
+
+    for(const key in counts){
+
+        if(counts[key] > highest){
+
+            highest = counts[key];
+
+            medicine = key;
+
+        }
+
+    }
+
+    mostMedicine.textContent =
+    medicine;
+
+    lastScan.textContent =
+    latestMedicine;
+
+    // ---------------- AI Chats ----------------
+
+    const chatQuery = query(
+
+        collection(db,"chatHistory"),
+
+        where("uid","==",user.uid)
+
+    );
+
+    const chatSnap =
+    await getDocs(chatQuery);
+
+    totalChats.textContent =
+    chatSnap.size;
 
 }
 
-auth.onAuthStateChanged(user=>{
+onAuthStateChanged(auth,(user)=>{
 
-if(user){
+    if(user){
 
-loadHistory();
+        loadHistory(user);
 
-}
+    }
 
-});
-const counts = {};
+    else{
 
-snapshot.forEach(doc=>{
+        window.location.href =
+        "login.html";
 
-const name =
-doc.data().medicineName;
-
-counts[name] =
-(counts[name]||0)+1;
+    }
 
 });
