@@ -249,3 +249,55 @@ async function sendMessage() {
     }
 
 }
+const micBtn =
+document.getElementById("micBtn");
+
+const SpeechRecognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+if(SpeechRecognition && micBtn){
+
+const recognition =
+new SpeechRecognition();
+
+recognition.lang = "en-IN";
+
+recognition.interimResults = false;
+
+recognition.continuous = false;
+
+micBtn.addEventListener("click",()=>{
+
+recognition.start();
+
+micBtn.innerHTML="🎙️";
+
+});
+
+recognition.onresult=(event)=>{
+
+const text =
+event.results[0][0].transcript;
+
+questionInput.value=text;
+
+sendMessage();
+
+};
+
+recognition.onend=()=>{
+
+micBtn.innerHTML="🎤";
+
+};
+
+}else{
+
+if(micBtn){
+
+micBtn.style.display="none";
+
+}
+
+}
