@@ -1,16 +1,39 @@
-darkModeBtn?.addEventListener("click",()=>{
+const darkModeBtn = document.getElementById("darkModeBtn");
 
-    alert("Dark Mode Clicked");
+// Apply saved theme on every page
+function applyTheme(){
 
-    document.body.classList.toggle("dark");
+    const theme = localStorage.getItem("theme");
 
-    if(document.body.classList.contains("dark")){
+    if(theme === "dark"){
 
-        localStorage.setItem("theme","dark");
+        document.body.classList.add("dark");
 
     }else{
 
+        document.body.classList.remove("dark");
+
+    }
+
+}
+
+// Apply immediately when page loads
+applyTheme();
+
+// Toggle only if Dark Mode button exists
+darkModeBtn?.addEventListener("click",()=>{
+
+    if(document.body.classList.contains("dark")){
+
+        document.body.classList.remove("dark");
+
         localStorage.setItem("theme","light");
+
+    }else{
+
+        document.body.classList.add("dark");
+
+        localStorage.setItem("theme","dark");
 
     }
 
