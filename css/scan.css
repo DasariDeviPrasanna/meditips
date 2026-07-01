@@ -1,11 +1,4 @@
-/* ===========================
-   SCAN PAGE
-=========================== */
-body{
 
-background:red !important;
-
-}
 .scan-page{
 
     max-width:900px;
@@ -379,5 +372,88 @@ font-size:18px;
 padding:20px;
 
 }
+
+}
+/* ==========================
+   OVERRIDE
+========================== */
+
+.preview-card{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+
+min-height:340px;
+
+}
+
+.preview-card img{
+
+width:220px !important;
+
+height:220px !important;
+
+object-fit:contain;
+
+}
+
+.action-card{
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+height:170px;
+
+}
+
+.action-card h3{
+
+margin-top:8px;
+
+font-size:22px;
+
+}
+
+.action-card p{
+
+margin-top:8px;
+
+}
+
+.scan-btn{
+
+margin-top:10px;
+
+font-size:22px;
+
+font-weight:700;
+
+}
+
+.tip{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+font-size:16px;
+
+}
+
+.page-header{
+
+margin-bottom:40px;
 
 }
