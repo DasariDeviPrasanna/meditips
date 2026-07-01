@@ -8,47 +8,27 @@ import {
     collection,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+// Elements
 const chatBox = document.getElementById("chatBox");
-const questionInput = document.getElementById("question");
+const questionInput = document.getElementById("questionInput");
 const sendBtn = document.getElementById("sendBtn");
+const micBtn = document.getElementById("micBtn");
 const newChatBtn = document.getElementById("newChatBtn");
 
 let conversationHistory = [];
 
+// --------------------
 // Send Button
-sendBtn.addEventListener("click", sendMessage);
+// --------------------
 
-// New Chat
-newChatBtn?.addEventListener("click", () => {
+sendBtn?.addEventListener("click", sendMessage);
 
-    conversationHistory = [];
-
-    chatBox.innerHTML = `
-        <div class="ai-message">
-
-            <div class="avatar">🤖</div>
-
-            <div class="bubble">
-
-                <strong>Meditips AI</strong>
-
-                <br><br>
-
-                👋 Hello!
-
-                I'm your AI Health Assistant.
-
-                Ask me anything about medicines.
-
-            </div>
-
-        </div>
-    `;
-
-});
-
+// --------------------
 // Enter Key
-questionInput.addEventListener("keypress", (e) => {
+// --------------------
+
+questionInput?.addEventListener("keypress", (e) => {
 
     if (e.key === "Enter") {
 
@@ -58,8 +38,11 @@ questionInput.addEventListener("keypress", (e) => {
 
 });
 
+// --------------------
 // Suggested Questions
-document.querySelectorAll(".suggestion").forEach((btn) => {
+// --------------------
+
+document.querySelectorAll(".suggestion").forEach(btn => {
 
     btn.addEventListener("click", () => {
 
@@ -71,70 +54,117 @@ document.querySelectorAll(".suggestion").forEach((btn) => {
 
 });
 
-// User Bubble
-function addUserMessage(text) {
+// --------------------
+// New Chat
+// --------------------
+
+newChatBtn?.addEventListener("click", () => {
+
+    conversationHistory = [];
+
+    chatBox.innerHTML = `
+
+    <div class="ai-message">
+
+        <div class="avatar">🤖</div>
+
+        <div class="bubble">
+
+            <strong>Meditips AI</strong>
+
+            <br><br>
+
+            👋 Hello!
+
+            I'm your AI Health Assistant.
+
+            Ask me anything about medicines.
+
+        </div>
+
+    </div>
+
+    `;
+
+});
+
+// --------------------
+// User Message
+// --------------------
+
+function addUserMessage(text){
 
     chatBox.innerHTML += `
 
-        <div class="user-message">
+    <div class="user-message">
 
-            <div class="bubble">
+        <div class="bubble">
 
-${text}
-
-<br><br>
-
-<button
-class="speakBtn">
-
-🔊 Listen
-
-</button>
-
-</div>
-
-            <div class="avatar">
-
-                👤
-
-            </div>
+            ${text}
 
         </div>
+
+        <div class="avatar">
+
+            👤
+
+        </div>
+
+    </div>
 
     `;
 
 }
 
-// AI Bubble
-function addAIMessage(text) {
+// --------------------
+// AI Message
+// --------------------
+
+function addAIMessage(text){
 
     chatBox.innerHTML += `
 
-        <div class="ai-message">
+    <div class="ai-message">
 
-            <div class="avatar">
+        <div class="avatar">
 
-                🤖
-
-            </div>
-
-            <div class="bubble">
-
-                ${text}
-
-            </div>
+            🤖
 
         </div>
+
+        <div class="bubble">
+
+            ${text}
+
+            <br><br>
+
+            <button class="speakBtn">
+
+                🔊 Listen
+
+            </button>
+
+        </div>
+
+    </div>
 
     `;
 
 }
 
-async function sendMessage() {
+// --------------------
+// Send Message
+// --------------------
+
+async function sendMessage(){
 
     const question = questionInput.value.trim();
 
-    if (!question) return;
+    if(!question){
+
+        return;
+
+    }
 
     addUserMessage(question);
 
@@ -146,17 +176,17 @@ async function sendMessage() {
 
     loading.innerHTML = `
 
-        <div class="avatar">
+    <div class="avatar">
 
-            🤖
+        🤖
 
-        </div>
+    </div>
 
-        <div class="bubble">
+    <div class="bubble">
 
-            ⏳ Thinking...
+        ⏳ Thinking...
 
-        </div>
+    </div>
 
     `;
 
@@ -164,23 +194,27 @@ async function sendMessage() {
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    try {
+    try{
 
-        const response = await fetch("/api/chatbot", {
+        const response = await fetch("/api/chatbot",{
 
-            method: "POST",
+            method:"POST",
 
-            headers: {
+            headers:{
 
-                "Content-Type": "application/json"
+                "Content-Type":"application/json"
 
             },
 
-            body: JSON.stringify({
+            body:JSON.stringify({
 
-                userMessage: question,
+                userMessage:question,
 
-                medicineName: localStorage.getItem("medicineName") || "Unknown Medicine",
+                medicineName:
+
+                localStorage.getItem("medicineName") ||
+
+                "General",
 
                 conversationHistory
 
@@ -190,70 +224,77 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        if (loading.parentNode) {
-
-            loading.parentNode.removeChild(loading);
-
-        }
+        loading.remove();
 
         addAIMessage(data.reply);
+
+        // Speak automatically
+
+        speakReply(data.reply);
+
+        // Listen Button
+
         setTimeout(()=>{
 
-const buttons =
+            const buttons =
 
-document.querySelectorAll(".speakBtn");
+            document.querySelectorAll(".speakBtn");
 
-const btn =
+            const btn =
 
-buttons[buttons.length-1];
+            buttons[buttons.length-1];
 
-btn.onclick=()=>{
+            btn.onclick=()=>{
 
-speakReply(data.reply);
+                speakReply(data.reply);
 
-};
+            };
 
-},50);
-        speakReply(data.reply);
-        if (auth.currentUser) {
+        },100);
 
-    await addDoc(
+        // Save Chat
 
-        collection(db, "chatHistory"),
+        if(auth.currentUser){
 
-        {
+            await addDoc(
 
-            uid: auth.currentUser.uid,
+                collection(db,"chatHistory"),
 
-            medicineName:
-                localStorage.getItem("medicineName") || "General",
+                {
 
-            userMessage: question,
+                    uid:auth.currentUser.uid,
 
-            aiReply: data.reply,
+                    medicineName:
 
-            createdAt: serverTimestamp()
+                    localStorage.getItem("medicineName") ||
+
+                    "General",
+
+                    userMessage:question,
+
+                    aiReply:data.reply,
+
+                    createdAt:serverTimestamp()
+
+                }
+
+            );
 
         }
 
-    );
-
-}
-
-        // Save conversation
         conversationHistory.push({
 
-            role: "user",
+            role:"user",
 
-            text: question
+            text:question
 
         });
 
         conversationHistory.push({
 
-            role: "assistant",
+            role:"assistant",
 
-            text: data.reply
+            text:data.reply
 
         });
 
@@ -261,13 +302,9 @@ speakReply(data.reply);
 
     }
 
-    catch (error) {
+    catch(error){
 
-        if (loading.parentNode) {
-
-            loading.parentNode.removeChild(loading);
-
-        }
+        loading.remove();
 
         addAIMessage("❌ Unable to connect. Please try again.");
 
@@ -276,82 +313,89 @@ speakReply(data.reply);
     }
 
 }
-const micBtn =
-document.getElementById("micBtn");
+
+// --------------------
+// Voice Input
+// --------------------
 
 const SpeechRecognition =
+
 window.SpeechRecognition ||
+
 window.webkitSpeechRecognition;
 
 if(SpeechRecognition && micBtn){
 
-const recognition =
-new SpeechRecognition();
+    const recognition =
 
-recognition.lang = "en-IN";
+    new SpeechRecognition();
 
-recognition.interimResults = false;
+    recognition.lang="en-IN";
 
-recognition.continuous = false;
+    recognition.interimResults=false;
 
-micBtn.addEventListener("click",()=>{
+    recognition.continuous=false;
 
-recognition.start();
+    micBtn.addEventListener("click",()=>{
 
-micBtn.innerHTML="🎙️";
+        recognition.start();
 
-});
+        micBtn.innerHTML="🎙️";
 
-recognition.onresult=(event)=>{
+    });
 
-const text =
-event.results[0][0].transcript;
+    recognition.onresult=(event)=>{
 
-questionInput.value=text;
+        questionInput.value=
 
-sendMessage();
+        event.results[0][0].transcript;
 
-};
+        sendMessage();
 
-recognition.onend=()=>{
+    };
 
-micBtn.innerHTML="🎤";
+    recognition.onend=()=>{
 
-};
+        micBtn.innerHTML="🎤";
+
+    };
 
 }else{
 
-if(micBtn){
+    if(micBtn){
 
-micBtn.style.display="none";
+        micBtn.style.display="none";
+
+    }
 
 }
 
-}
+// --------------------
+// Voice Output
+// --------------------
+
 function speakReply(text){
 
-if(!("speechSynthesis" in window)){
+    if(!("speechSynthesis" in window)){
 
-return;
+        return;
 
-}
+    }
 
-const speech =
+    window.speechSynthesis.cancel();
 
-new SpeechSynthesisUtterance();
+    const speech =
 
-speech.text = text;
+    new SpeechSynthesisUtterance(text);
 
-speech.lang = "en-IN";
+    speech.lang="en-IN";
 
-speech.rate = 1;
+    speech.rate=1;
 
-speech.pitch = 1;
+    speech.pitch=1;
 
-speech.volume = 1;
+    speech.volume=1;
 
-window.speechSynthesis.cancel();
-
-window.speechSynthesis.speak(speech);
+    window.speechSynthesis.speak(speech);
 
 }
