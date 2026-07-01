@@ -1,19 +1,6 @@
-if(localStorage.getItem("theme")==="dark"){
-
-    document.body.classList.add("dark");
-
-}
-const darkModeBtn =
-document.getElementById("darkModeBtn");
-
-// Apply saved theme
-if(localStorage.getItem("theme")==="dark"){
-
-    document.body.classList.add("dark");
-
-}
-
 darkModeBtn?.addEventListener("click",()=>{
+
+    alert("Dark Mode Clicked");
 
     document.body.classList.toggle("dark");
 
@@ -21,9 +8,7 @@ darkModeBtn?.addEventListener("click",()=>{
 
         localStorage.setItem("theme","dark");
 
-    }
-
-    else{
+    }else{
 
         localStorage.setItem("theme","light");
 
