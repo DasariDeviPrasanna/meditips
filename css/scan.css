@@ -1,7 +1,11 @@
 /* ===========================
    SCAN PAGE
 =========================== */
+body{
 
+background:red !important;
+
+}
 .scan-page{
 
     max-width:900px;
