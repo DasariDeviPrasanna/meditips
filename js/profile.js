@@ -12,8 +12,12 @@ import {
     collection,
     query,
     where,
-    getDocs
+    getDocs,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+// Elements
 
 const profilePhoto =
 document.getElementById("profilePhoto");
@@ -33,35 +37,66 @@ document.getElementById("totalChats");
 const logoutBtn =
 document.getElementById("logoutBtn");
 
+const editProfileBtn =
+document.getElementById("editProfileBtn");
+
+// ======================
+// Load Profile
+// ======================
+
 onAuthStateChanged(auth, async(user)=>{
 
     if(!user){
 
-        window.location.href =
-        "login.html";
+        window.location.href="login.html";
 
         return;
 
     }
 
-    // User Info
-
-    profileName.textContent =
-    user.displayName || "User";
-
-    profileEmail.textContent =
-    user.email;
-
-    profilePhoto.src =
-    user.photoURL ||
-    `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}`;
-
     try{
 
-        // Scan Count
+        // Firestore User Data
 
-        const scanQuery =
-        query(
+        const userRef = doc(db,"users",user.uid);
+
+        const userSnap = await getDoc(userRef);
+
+        if(userSnap.exists()){
+
+            const data = userSnap.data();
+
+            profileName.textContent =
+            data.name || "User";
+
+            profileEmail.textContent =
+            data.email || user.email;
+
+            profilePhoto.src =
+            data.photo ||
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || "User")}`;
+
+        }
+
+        else{
+
+            profileName.textContent =
+            user.displayName || "User";
+
+            profileEmail.textContent =
+            user.email;
+
+            profilePhoto.src =
+            user.photoURL ||
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}`;
+
+        }
+
+        // ======================
+        // Total Scans
+        // ======================
+
+        const scanQuery = query(
 
             collection(db,"history"),
 
@@ -75,10 +110,11 @@ onAuthStateChanged(auth, async(user)=>{
         totalScans.textContent =
         scanSnapshot.size;
 
-        // Chat Count
+        // ======================
+        // AI Chats
+        // ======================
 
-        const chatQuery =
-        query(
+        const chatQuery = query(
 
             collection(db,"chatHistory"),
 
@@ -102,17 +138,36 @@ onAuthStateChanged(auth, async(user)=>{
 
 });
 
+// ======================
+// Edit Profile
+// ======================
+
+editProfileBtn?.addEventListener("click",()=>{
+
+    window.location.href="edit-profile.html";
+
+});
+
+// ======================
 // Logout
+// ======================
 
-logoutBtn.addEventListener(
+logoutBtn?.addEventListener("click",async()=>{
 
-"click",
+    try{
 
-async()=>{
+        await signOut(auth);
 
-    await signOut(auth);
+        window.location.href="login.html";
 
-    window.location.href =
-    "login.html";
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("Logout Failed");
+
+    }
 
 });

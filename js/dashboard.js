@@ -1,4 +1,3 @@
-
 import {
     auth,
     db
@@ -14,8 +13,14 @@ import {
     where,
     getDocs,
     orderBy,
-    limit
+    limit,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+// ===========================
+// DOM Elements
+// ===========================
 
 const photo = document.getElementById("userPhoto");
 const welcome = document.getElementById("welcomeText");
@@ -24,46 +29,82 @@ const chatCount = document.getElementById("chatCount");
 const recentActivity = document.getElementById("recentActivity");
 const tipElement = document.getElementById("healthTip");
 
+// ===========================
+// Authentication
+// ===========================
+
 onAuthStateChanged(auth, async (user) => {
 
     if (!user) {
-
         window.location.href = "login.html";
         return;
-
     }
 
+    // ===========================
     // Greeting
+    // ===========================
 
     const hour = new Date().getHours();
 
     let greeting = "Good Evening 🌙";
 
     if (hour < 12) {
-
         greeting = "Good Morning ☀️";
-
     } else if (hour < 17) {
-
         greeting = "Good Afternoon 🌤️";
+    }
+
+    // ===========================
+    // Load User Profile
+    // ===========================
+
+    try {
+
+        const userRef = doc(db, "users", user.uid);
+
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+
+            const data = userSnap.data();
+
+            welcome.innerHTML =
+                `👋 ${greeting}, ${data.name || "User"}`;
+
+            photo.src =
+                data.photo ||
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || "User")}`;
+
+        } else {
+
+            welcome.innerHTML =
+                `👋 ${greeting}, ${user.displayName || "User"}`;
+
+            photo.src =
+                user.photoURL ||
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}`;
+
+        }
+
+    } catch (error) {
+
+        console.error("User Profile Error:", error);
 
     }
 
-    welcome.innerHTML = `👋 ${greeting}, ${user.displayName || "User"}`;
-
-    // Profile Photo
-
-    photo.src =
-        user.photoURL ||
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(
-            user.displayName || "User"
-        )}`;
+    // ===========================
+    // Profile Click
+    // ===========================
 
     photo.addEventListener("click", () => {
 
         window.location.href = "profile.html";
 
     });
+
+    // ===========================
+    // Dashboard Data
+    // ===========================
 
     try {
 
@@ -77,11 +118,11 @@ onAuthStateChanged(auth, async (user) => {
 
         );
 
-        const historySnapshot =
-            await getDocs(historyQuery);
+        const historySnapshot = await getDocs(historyQuery);
 
-        scanCount.textContent =
-            historySnapshot.size;
+        scanCount.textContent = historySnapshot.size;
+
+        // ===========================
 
         // AI Chat Count
 
@@ -93,11 +134,11 @@ onAuthStateChanged(auth, async (user) => {
 
         );
 
-        const chatSnapshot =
-            await getDocs(chatQuery);
+        const chatSnapshot = await getDocs(chatQuery);
 
-        chatCount.textContent =
-            chatSnapshot.size;
+        chatCount.textContent = chatSnapshot.size;
+
+        // ===========================
 
         // Recent Activity
 
@@ -113,8 +154,7 @@ onAuthStateChanged(auth, async (user) => {
 
         );
 
-        const recentSnapshot =
-            await getDocs(recentQuery);
+        const recentSnapshot = await getDocs(recentQuery);
 
         recentActivity.innerHTML = "";
 
@@ -122,47 +162,35 @@ onAuthStateChanged(auth, async (user) => {
 
             recentActivity.innerHTML = `
 
-            <div class="activity">
-
-                No recent scans yet.
-
-            </div>
+                <div class="activity">
+                    No recent scans yet.
+                </div>
 
             `;
 
         } else {
 
-            recentSnapshot.forEach((doc) => {
+            recentSnapshot.forEach((docSnap) => {
 
-                const item = doc.data();
+                const item = docSnap.data();
 
-                const date =
-                    item.scannedAt?.toDate();
+                const date = item.scannedAt?.toDate();
 
-                const time =
-                    date
-                        ? date.toLocaleString()
-                        : "Recently";
+                const time = date
+                    ? date.toLocaleString()
+                    : "Recently";
 
                 recentActivity.innerHTML += `
 
-                <div class="activity">
+                    <div class="activity">
 
-                    <strong>
+                        <strong>💊 ${item.medicineName}</strong>
 
-                        💊 ${item.medicineName}
+                        <br>
 
-                    </strong>
+                        <small>${time}</small>
 
-                    <br>
-
-                    <small>
-
-                        ${time}
-
-                    </small>
-
-                </div>
+                    </div>
 
                 `;
 
@@ -170,50 +198,41 @@ onAuthStateChanged(auth, async (user) => {
 
         }
 
-        // Health Tips
+    } catch (error) {
 
-        
-    }
-
-    catch (error) {
-
-        console.error(
-            "Dashboard Error:",
-            error
-        );
+        console.error("Dashboard Error:", error);
 
     }
 
 });
 
+// ===========================
+// Health Tips
+// ===========================
+
 const tips = [
 
-            "💧 Drink at least 8 glasses of water today.",
+    "💧 Drink at least 8 glasses of water today.",
 
-            "🥗 Eat more fruits and vegetables.",
+    "🥗 Eat more fruits and vegetables.",
 
-            "🚶 Walk for at least 30 minutes.",
+    "🚶 Walk for at least 30 minutes.",
 
-            "😴 Sleep 7-8 hours every night.",
+    "😴 Sleep 7-8 hours every night.",
 
-            "💊 Never self-medicate without consulting a doctor.",
+    "💊 Never self-medicate without consulting a doctor.",
 
-            "🩺 Complete your medicine course.",
+    "🩺 Complete your medicine course.",
 
-            "❤️ Exercise regularly for better health.",
+    "❤️ Exercise regularly for better health.",
 
-            "🍎 Eat a balanced diet every day."
+    "🍎 Eat a balanced diet every day."
 
-        ];
+];
 
-        if (tipElement) {
+if (tipElement) {
 
-            tipElement.textContent =
+    tipElement.textContent =
+        tips[Math.floor(Math.random() * tips.length)];
 
-                tips[
-                    Math.floor(
-                        Math.random() * tips.length
-                    )
-                ];
-
-        }
+}
