@@ -1,10 +1,15 @@
 import { auth, db } from "./firebase-config.js";
-
 import {
     addDoc,
     collection,
-    serverTimestamp
+    serverTimestamp,
+    query,
+    where,
+    getDocs,
+    deleteDoc,
+    doc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
 async function loadMedicine() {
 
     const medicineName =
@@ -79,9 +84,44 @@ loadMedicine();
 
 // ❤️ Favorite
 
-const favoriteBtn =
-document.getElementById("favoriteBtn");
+const favoriteBtn = document.getElementById("favoriteBtn");
 
+async function checkFavorite() {
+
+    if (!auth.currentUser) return;
+
+    const medicineName = localStorage.getItem("medicineName");
+
+    const q = query(
+        collection(db, "favorites"),
+        where("uid", "==", auth.currentUser.uid),
+        where("medicineName", "==", medicineName)
+    );
+
+    const snap = await getDocs(q);
+
+    if (!snap.empty) {
+
+        favoriteBtn.innerHTML = "💔 Remove Favorite";
+        favoriteBtn.dataset.docId = snap.docs[0].id;
+
+    } else {
+
+        favoriteBtn.innerHTML = "❤️ Save to Favorites";
+
+    }
+
+}
+
+auth.onAuthStateChanged(async (user) => {
+
+    if (user) {
+
+        await checkFavorite();
+
+    }
+
+});
 
 favoriteBtn?.addEventListener("click", async () => {
 
@@ -93,35 +133,46 @@ favoriteBtn?.addEventListener("click", async () => {
 
     }
 
+    const medicineName = localStorage.getItem("medicineName");
+
     try {
 
-        await addDoc(
+        if (favoriteBtn.dataset.docId) {
 
-            collection(db, "favorites"),
+            await deleteDoc(
+                doc(db, "favorites", favoriteBtn.dataset.docId)
+            );
 
-            {
+            favoriteBtn.innerHTML = "❤️ Save to Favorites";
 
-                uid: auth.currentUser.uid,
+            delete favoriteBtn.dataset.docId;
 
-                medicineName: localStorage.getItem("medicineName"),
+            alert("Removed from Favorites");
 
-                savedAt: serverTimestamp()
+        } else {
 
-            }
+            const ref = await addDoc(
+                collection(db, "favorites"),
+                {
+                    uid: auth.currentUser.uid,
+                    medicineName,
+                    savedAt: serverTimestamp()
+                }
+            );
 
-        );
+            favoriteBtn.dataset.docId = ref.id;
 
-        favoriteBtn.innerHTML = "❤️ Saved";
+            favoriteBtn.innerHTML = "💔 Remove Favorite";
 
-        favoriteBtn.disabled = true;
+            alert("Added to Favorites");
 
-    }
+        }
 
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
 
-        alert("Unable to save favorite.");
+        alert("Unable to update favorites.");
 
     }
 
