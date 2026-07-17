@@ -4,107 +4,113 @@ import {
     collection,
     query,
     where,
+    getDocs,
     orderBy,
-    getDocs
+    deleteDoc,
+    doc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-const list =
-document.getElementById("favoritesList");
+const favoritesList = document.getElementById("favoritesList");
 
-async function loadFavorites(){
+auth.onAuthStateChanged(async (user) => {
 
-    if(!auth.currentUser){
+    if (!user) {
 
-        list.innerHTML =
-        "<p>Please login.</p>";
-
-        return;
-
-    }
-
-    const q =
-    query(
-
-        collection(db,"favorites"),
-
-        where("uid","==",auth.currentUser.uid),
-
-        orderBy("savedAt","desc")
-
-    );
-
-    const snapshot =
-    await getDocs(q);
-
-    list.innerHTML="";
-
-    if(snapshot.empty){
-
-        list.innerHTML =
-        "<p>No favorites yet ❤️</p>";
-
-        return;
-
-    }
-
-    snapshot.forEach(doc=>{
-
-        const data =
-        doc.data();
-
-        list.innerHTML += `
-
-        <div class="favorite-card">
-
-            <div>
-
-                <h3>💊 ${data.medicineName}</h3>
-
-            </div>
-
-            <button
-            class="openBtn"
-            data-name="${data.medicineName}">
-
-            Open
-
-            </button>
-
-        </div>
-
+        favoritesList.innerHTML = `
+            <p>Please login to view favorites.</p>
         `;
 
-    });
+        return;
+    }
 
-    document
-    .querySelectorAll(".openBtn")
-    .forEach(btn=>{
+    loadFavorites(user.uid);
 
-        btn.onclick=()=>{
+});
 
-            localStorage.setItem(
+async function loadFavorites(uid) {
 
-                "medicineName",
+    favoritesList.innerHTML = "<p>Loading...</p>";
 
-                btn.dataset.name
+    try {
 
-            );
+        const q = query(
+            collection(db, "favorites"),
+            where("uid", "==", uid),
+            orderBy("savedAt", "desc")
+        );
 
-            window.location.href =
-            "result.html";
+        const snapshot = await getDocs(q);
 
-        };
+        if (snapshot.empty) {
 
-    });
+            favoritesList.innerHTML = `
+                <div class="empty">
+                    <h3>No Favorites Yet ❤️</h3>
+                    <p>Save medicines to see them here.</p>
+                </div>
+            `;
 
-}
+            return;
+        }
 
-auth.onAuthStateChanged(user=>{
+        favoritesList.innerHTML = "";
 
-    if(user){
+        snapshot.forEach((docSnap) => {
 
-        loadFavorites();
+            const data = docSnap.data();
+
+            const card = document.createElement("div");
+
+            card.className = "favorite-card";
+
+            card.innerHTML = `
+                <h3>💊 ${data.medicineName}</h3>
+
+                <div class="buttons">
+                    <button class="view-btn">View</button>
+                    <button class="delete-btn">Remove</button>
+                </div>
+            `;
+
+            // View Medicine
+            card.querySelector(".view-btn").onclick = () => {
+
+                localStorage.setItem(
+                    "medicineName",
+                    data.medicineName
+                );
+
+                window.location.href = "result.html";
+
+            };
+
+            // Remove Favorite
+            card.querySelector(".delete-btn").onclick = async () => {
+
+                if (!confirm("Remove this medicine from favorites?"))
+                    return;
+
+                await deleteDoc(
+                    doc(db, "favorites", docSnap.id)
+                );
+
+                loadFavorites(uid);
+
+            };
+
+            favoritesList.appendChild(card);
+
+        });
 
     }
 
-});
+    catch (error) {
+
+        console.error(error);
+
+        favoritesList.innerHTML =
+            "<p>Unable to load favorites.</p>";
+
+    }
+
+}
