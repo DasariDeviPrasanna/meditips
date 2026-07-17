@@ -67,71 +67,85 @@ changePhotoBtn.onclick=()=>{
 photoInput.click();
 
 };
+let selectedFile = null;
 
-photoInput.onchange=(e)=>{
+photoInput.onchange = (e) => {
 
-const file=
+    const file = e.target.files[0];
 
-e.target.files[0];
+    if (!file) return;
 
-if(!file) return;
+    selectedFile = file;
 
-const reader=
-
-new FileReader();
-
-reader.onload=()=>{
-
-photo.src=
-
-reader.result;
-
-photoURL=
-
-reader.result;
+    photo.src = URL.createObjectURL(file);
 
 };
 
-reader.readAsDataURL(file);
+async function uploadToCloudinary(file){
 
-};
+    const formData = new FormData();
 
+    formData.append("file", file);
+
+    formData.append("upload_preset", "meditips_profile");
+
+    const response = await fetch(
+
+        "https://api.cloudinary.com/v1_1/dbndj5bud/image/upload",
+
+        {
+
+            method: "POST",
+
+            body: formData
+
+        }
+
+    );
+
+    const data = await response.json();
+
+    return data.secure_url;
+
+}
 // Save
 saveBtn.onclick = async () => {
 
     const user = auth.currentUser;
 
-    if(!user){
+    if (!user) return;
 
-        return;
+    try {
 
-    }
+        let finalPhotoURL = user.photoURL || "";
 
-    try{
+        // Upload only if user selected a new image
 
-        await updateProfile(
+        if (selectedFile) {
 
-            user,
+            finalPhotoURL = await uploadToCloudinary(selectedFile);
 
-            {
+        }
 
-                displayName:nameInput.value,
+        await updateProfile(user, {
 
-                photoURL:photoURL
+            displayName: nameInput.value,
 
-            }
+            photoURL: finalPhotoURL
 
-        );
+        });
 
         await updateDoc(
 
-            doc(db,"users",user.uid),
+            doc(db, "users", user.uid),
 
             {
 
-                name:nameInput.value,
+                name: nameInput.value,
 
-                photo:photoURL
+                email: user.email,
+
+                photo: finalPhotoURL
 
             }
 
@@ -139,11 +153,11 @@ saveBtn.onclick = async () => {
 
         alert("✅ Profile Updated Successfully");
 
-        window.location.href="profile.html";
+        window.location.href = "profile.html";
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(error);
 
