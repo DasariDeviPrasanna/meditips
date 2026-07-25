@@ -1,3 +1,5 @@
+import { translatePage }
+from "./translator.js";
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 
@@ -11,6 +13,8 @@ import {
   getFirestore
 }
 from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+translatePage();
 
 const firebaseConfig = {
   apiKey: "AIzaSyDAmNN_NFoRUM-a1ycEzwX-aG9b8JZTNjM",

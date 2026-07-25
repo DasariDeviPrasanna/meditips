@@ -1,3 +1,5 @@
+import { translatePage }
+from "./translator.js";
 import {
     db,
     auth
@@ -8,7 +10,7 @@ import {
     collection,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
+translatePage();
 // Elements
 const chatBox = document.getElementById("chatBox");
 const questionInput = document.getElementById("questionInput");

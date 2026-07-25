@@ -1,3 +1,5 @@
+import { translatePage }
+from "./translator.js";
 import { db, auth } from "./firebase-config.js";
 
 import {
@@ -11,6 +13,8 @@ import {
 import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+translatePage();
 
 const historyList =
 document.getElementById("historyList");

@@ -1,3 +1,5 @@
+import { translatePage }
+from "./translator.js";
 import { auth, db } from "./firebase-config.js";
 
 import {
@@ -9,6 +11,8 @@ import {
 doc,
 updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+translatePage();
 
 const photo =
 document.getElementById("editPhoto");

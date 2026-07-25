@@ -1,3 +1,5 @@
+import { translatePage }
+from "./translator.js";
 import {
     auth,
     db
@@ -16,6 +18,8 @@ import {
     doc,
     getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+translatePage();
 
 // Elements
 
