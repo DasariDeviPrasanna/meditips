@@ -12,12 +12,15 @@ content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet"
 href="../css/profile.css">
+
 <link rel="stylesheet"
 href="../css/edit-profile.css">
 
 <link rel="stylesheet"
 href="../css/navbar.css">
-<link rel="stylesheet" href="../css/common.css">
+
+<link rel="stylesheet"
+href="../css/common.css">
 
 </head>
 
@@ -34,15 +37,11 @@ href="../css/navbar.css">
         alt="Profile">
 
         <h2 id="profileName">
-
             User
-
         </h2>
 
         <p id="profileEmail">
-
             user@gmail.com
-
         </p>
 
     </div>
@@ -53,7 +52,7 @@ href="../css/navbar.css">
 
             <h2 id="totalScans">0</h2>
 
-            <p>Total Scans</p>
+            <p data-i18n="totalScans">Total Scans</p>
 
         </div>
 
@@ -61,7 +60,7 @@ href="../css/navbar.css">
 
             <h2 id="totalChats">0</h2>
 
-            <p>AI Chats</p>
+            <p data-i18n="aiChats">AI Chats</p>
 
         </div>
 
@@ -69,53 +68,61 @@ href="../css/navbar.css">
 
     <div class="settings-card">
 
-        <h3>Health</h3>
+        <h3 data-i18n="health">Health</h3>
+
         <div
-class="setting-item"
-id="editProfileBtn">
+        class="setting-item"
+        id="editProfileBtn">
 
-<span>
+            <span data-i18n="editProfile">
+                ✏️ Edit Profile
+            </span>
 
-✏️ Edit Profile
-
-</span>
-
-<span>
-
-›
-
-</span>
-
-</div>
-        
-
-        <div class="setting-item">
-
-            <span>🌐 Language</span>
             <span>›</span>
 
         </div>
 
-        <div class="setting-item"
+        <div
+        class="setting-item"
+        onclick="window.location.href='language.html'">
+
+            <span data-i18n="language">
+                🌐 Language
+            </span>
+
+            <span>›</span>
+
+        </div>
+
+        <div
+        class="setting-item"
         onclick="window.location.href='favorites.html'">
 
-            <span>❤️ Favorites</span>
+            <span data-i18n="favorites">
+                ❤️ Favorites
+            </span>
 
             <span>›</span>
 
         </div>
 
-        <div class="setting-item" id="darkModeBtn">
+        <div
+        class="setting-item"
+        id="darkModeBtn">
 
-    🌙
+            🌙
 
-    <span>Dark Mode</span>
+            <span data-i18n="darkMode">
+                Dark Mode
+            </span>
 
-</div>
+        </div>
 
         <div class="setting-item">
 
-            <span>🔔 Notifications</span>
+            <span data-i18n="notifications">
+                🔔 Notifications
+            </span>
 
             <span>›</span>
 
@@ -123,7 +130,9 @@ id="editProfileBtn">
 
         <div class="setting-item">
 
-            <span>🤖 AI Preferences</span>
+            <span data-i18n="aiPreferences">
+                🤖 AI Preferences
+            </span>
 
             <span>›</span>
 
@@ -133,11 +142,13 @@ id="editProfileBtn">
 
     <div class="settings-card">
 
-        <h3>Support</h3>
+        <h3 data-i18n="support">Support</h3>
 
         <div class="setting-item">
 
-            <span>❤️ About Meditips</span>
+            <span data-i18n="about">
+                ❤️ About Meditips
+            </span>
 
             <span>›</span>
 
@@ -145,7 +156,9 @@ id="editProfileBtn">
 
         <div class="setting-item">
 
-            <span>⭐ Rate App</span>
+            <span data-i18n="rateApp">
+                ⭐ Rate App
+            </span>
 
             <span>›</span>
 
@@ -153,7 +166,9 @@ id="editProfileBtn">
 
         <div class="setting-item">
 
-            <span>📞 Contact Us</span>
+            <span data-i18n="contact">
+                📞 Contact Us
+            </span>
 
             <span>›</span>
 
@@ -161,7 +176,9 @@ id="editProfileBtn">
 
         <div class="setting-item">
 
-            <span>🔒 Privacy Policy</span>
+            <span data-i18n="privacy">
+                🔒 Privacy Policy
+            </span>
 
             <span>›</span>
 
@@ -171,7 +188,8 @@ id="editProfileBtn">
 
     <button
     id="logoutBtn"
-    class="logout-btn">
+    class="logout-btn"
+    data-i18n="logout">
 
         🚪 Logout
 
@@ -186,7 +204,9 @@ src="../js/profile.js"></script>
 <script
 type="module"
 src="../js/navbar.js"></script>
-<script type="module"
+
+<script
+type="module"
 src="../js/darkmode.js"></script>
 
 </body>
